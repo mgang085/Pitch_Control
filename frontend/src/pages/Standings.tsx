@@ -3,12 +3,12 @@ import { BarChart3 } from 'lucide-react';
 import { divisionsAPI, standingsAPI, unionsAPI } from '../services/api';
 
 export const Standings = () => {
-  const [unions, setUnions] = useState([]);
-  const [divisions, setDivisions] = useState([]);
-  const [filteredDivisions, setFilteredDivisions] = useState([]);
+  const [unions, setUnions] = useState<any[]>([]);
+  const [divisions, setDivisions] = useState<any[]>([]);
+  const [filteredDivisions, setFilteredDivisions] = useState<any[]>([]);
   const [selectedUnion, setSelectedUnion] = useState<string>('');
   const [selectedDivision, setSelectedDivision] = useState<string>('');
-  const [standings, setStandings] = useState([]);
+  const [standings, setStandings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
