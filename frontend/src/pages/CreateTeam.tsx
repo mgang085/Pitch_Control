@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users } from 'lucide-react';
 import { teamsAPI, divisionsAPI } from '../services/api';
+import { FileUpload } from '../components/FileUpload';
 
 export const CreateTeam = () => {
   const navigate = useNavigate();
@@ -94,7 +95,7 @@ export const CreateTeam = () => {
               />
             </div>
 
-            <div>
+            <div className="md:col-span-2">
               <label className="label">Division (Optional)</label>
               <select
                 name="divisionId"
@@ -111,17 +112,13 @@ export const CreateTeam = () => {
               </select>
             </div>
 
-            <div>
-              <label className="label">Team Logo URL</label>
-              <input
-                type="url"
-                name="logo"
-                className="input"
+            <div className="md:col-span-2">
+              <FileUpload
+                label="Team Logo"
                 value={formData.logo}
-                onChange={handleChange}
-                placeholder="https://example.com/team-logo.png"
+                onChange={(url) => setFormData({ ...formData, logo: url })}
+                helpText="Upload your team logo image (PNG, JPG, SVG)"
               />
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Optional: URL to your team logo</p>
             </div>
 
             <div>
