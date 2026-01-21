@@ -42,6 +42,19 @@ export class Union {
   @Column({ type: 'int', default: 0 })
   lossPoints: number;
 
+  // Bonus Point Settings
+  @Column({ type: 'int', default: 1 })
+  bonusPointsForTries: number;
+
+  @Column({ type: 'int', default: 4 })
+  minimumTriesForBonus: number;
+
+  @Column({ type: 'int', default: 1 })
+  bonusPointsForLosingMargin: number;
+
+  @Column({ type: 'int', default: 7 })
+  maximumLosingMarginForBonus: number;
+
   @OneToMany(() => Division, (division) => division.union)
   divisions: Division[];
 

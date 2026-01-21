@@ -20,6 +20,10 @@ export const EditUnion = () => {
     winPoints: 4,
     drawPoints: 2,
     lossPoints: 0,
+    bonusPointsForTries: 1,
+    minimumTriesForBonus: 4,
+    bonusPointsForLosingMargin: 1,
+    maximumLosingMarginForBonus: 7,
   });
 
   useEffect(() => {
@@ -50,6 +54,10 @@ export const EditUnion = () => {
         winPoints: union.winPoints ?? 4,
         drawPoints: union.drawPoints ?? 2,
         lossPoints: union.lossPoints ?? 0,
+        bonusPointsForTries: union.bonusPointsForTries ?? 1,
+        minimumTriesForBonus: union.minimumTriesForBonus ?? 4,
+        bonusPointsForLosingMargin: union.bonusPointsForLosingMargin ?? 1,
+        maximumLosingMarginForBonus: union.maximumLosingMarginForBonus ?? 7,
       });
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to load union');
@@ -202,6 +210,67 @@ export const EditUnion = () => {
                   onChange={handleChange}
                   min="0"
                 />
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t pt-6 dark:border-slate-600">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Bonus Point Settings</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Configure bonus points awarded for special achievements</p>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="label">Bonus Points for Tries</label>
+                  <input
+                    type="number"
+                    name="bonusPointsForTries"
+                    className="input"
+                    value={formData.bonusPointsForTries}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Points awarded when scoring enough tries</p>
+                </div>
+                <div>
+                  <label className="label">Minimum Tries for Bonus</label>
+                  <input
+                    type="number"
+                    name="minimumTriesForBonus"
+                    className="input"
+                    value={formData.minimumTriesForBonus}
+                    onChange={handleChange}
+                    min="1"
+                  />
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Number of tries required (e.g., 4 or more)</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="label">Bonus Points for Close Loss</label>
+                  <input
+                    type="number"
+                    name="bonusPointsForLosingMargin"
+                    className="input"
+                    value={formData.bonusPointsForLosingMargin}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Points awarded for losing by small margin</p>
+                </div>
+                <div>
+                  <label className="label">Maximum Losing Margin</label>
+                  <input
+                    type="number"
+                    name="maximumLosingMarginForBonus"
+                    className="input"
+                    value={formData.maximumLosingMarginForBonus}
+                    onChange={handleChange}
+                    min="1"
+                  />
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Max point difference to qualify (e.g., 7 or less)</p>
+                </div>
               </div>
             </div>
           </div>

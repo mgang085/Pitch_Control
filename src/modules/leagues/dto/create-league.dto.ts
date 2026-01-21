@@ -48,4 +48,28 @@ export class CreateLeagueDto {
   @IsInt()
   @Min(0)
   lossPoints?: number;
+
+  @ApiPropertyOptional({ example: 1, default: 1 })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  bonusPointsForTries?: number;
+
+  @ApiPropertyOptional({ example: 4, default: 4 })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  minimumTriesForBonus?: number;
+
+  @ApiPropertyOptional({ example: 1, default: 1 })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  bonusPointsForLosingMargin?: number;
+
+  @ApiPropertyOptional({ example: 7, default: 7 })
+  @IsOptional()
+  @IsInt()
+  @Min(1)
+  maximumLosingMarginForBonus?: number;
 }
