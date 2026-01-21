@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Standing } from './entities/standing.entity';
 import { Match } from '../matches/entities/match.entity';
 import { Division } from '../divisions/entities/division.entity';
+import { Team } from '../teams/entities/team.entity';
 import { MatchStatus } from '../../common/enums/match-status.enum';
 
 @Injectable()
@@ -15,6 +16,8 @@ export class StandingsService {
     private readonly matchRepository: Repository<Match>,
     @InjectRepository(Division)
     private readonly divisionRepository: Repository<Division>,
+    @InjectRepository(Team)
+    private readonly teamRepository: Repository<Team>,
   ) {}
 
   async calculateStandings(divisionId: string): Promise<Standing[]> {
@@ -30,14 +33,26 @@ export class StandingsService {
 
     const union = division.union;
 
+    // Get ALL teams in this division (even those with 0 matches)
+    const teams = await this.teamRepository.find({
+      where: { divisionId },
+    });
+
+    // Initialize standings for ALL teams in the division
+    const standingsMap = new Map<string, any>();
+    teams.forEach((team) => {
+      standingsMap.set(team.id, this.initializeStanding(divisionId, team.id));
+    });
+
+    // Get finished matches
     const matches = await this.matchRepository.find({
       where: { divisionId, status: MatchStatus.FINISHED },
       relations: ['homeTeam', 'awayTeam'],
     });
 
-    const standingsMap = new Map<string, any>();
-
+    // Process matches and update standings
     matches.forEach((match) => {
+      // Make sure teams exist in standings (defensive check)
       if (!standingsMap.has(match.homeTeamId)) {
         standingsMap.set(match.homeTeamId, this.initializeStanding(divisionId, match.homeTeamId));
       }
