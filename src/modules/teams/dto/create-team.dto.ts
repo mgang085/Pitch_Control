@@ -5,6 +5,11 @@ export class CreateTeamDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsUUID()
+  unionId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsUUID()
   divisionId?: string;
 
   @ApiProperty({ example: 'Warriors RFC' })

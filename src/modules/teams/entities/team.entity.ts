@@ -9,6 +9,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Division } from '../../divisions/entities/division.entity';
+import { Union } from '../../leagues/entities/league.entity';
 import { TeamContact } from './team-contact.entity';
 import { Player } from '../../players/entities/player.entity';
 import { Match } from '../../matches/entities/match.entity';
@@ -18,6 +19,13 @@ import { UserTeamRole } from './user-team-role.entity';
 export class Team {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column('uuid', { nullable: true })
+  unionId: string;
+
+  @ManyToOne(() => Union, { nullable: true })
+  @JoinColumn({ name: 'unionId' })
+  union: Union;
 
   @Column('uuid', { nullable: true })
   divisionId: string;

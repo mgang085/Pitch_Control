@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users } from 'lucide-react';
-import { teamsAPI, divisionsAPI } from '../services/api';
+import { teamsAPI, divisionsAPI, unionsAPI } from '../services/api';
 import { FileUpload } from '../components/FileUpload';
 
 export const CreateTeam = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [unions, setUnions] = useState([]);
   const [divisions, setDivisions] = useState([]);
+  const [filteredDivisions, setFilteredDivisions] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
+    unionId: '',
     divisionId: '',
     logo: '',
     homeVenue: '',
@@ -19,8 +22,37 @@ export const CreateTeam = () => {
   });
 
   useEffect(() => {
+    loadUnions();
     loadDivisions();
   }, []);
+
+  useEffect(() => {
+    // Filter divisions when union changes
+    if (formData.unionId) {
+      const filtered = divisions.filter((div: any) => div.leagueId === formData.unionId);
+      setFilteredDivisions(filtered);
+
+      // Clear division selection if it's not from the selected union
+      if (formData.divisionId) {
+        const divisionValid = filtered.some((div: any) => div.id === formData.divisionId);
+        if (!divisionValid) {
+          setFormData(prev => ({ ...prev, divisionId: '' }));
+        }
+      }
+    } else {
+      setFilteredDivisions([]);
+      setFormData(prev => ({ ...prev, divisionId: '' }));
+    }
+  }, [formData.unionId, divisions]);
+
+  const loadUnions = async () => {
+    try {
+      const response = await unionsAPI.getAll();
+      setUnions(response.data);
+    } catch (err) {
+      console.error('Failed to load unions:', err);
+    }
+  };
 
   const loadDivisions = async () => {
     try {
@@ -41,9 +73,10 @@ export const CreateTeam = () => {
     setLoading(true);
 
     try {
-      // Filter out empty fields and convert empty divisionId to undefined
+      // Filter out empty fields and convert empty IDs to undefined
       const payload = {
         ...formData,
+        unionId: formData.unionId || undefined,
         divisionId: formData.divisionId || undefined,
       };
 
@@ -70,13 +103,13 @@ export const CreateTeam = () => {
           <Users className="w-8 h-8 text-primary-600 dark:text-primary-400" />
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Create New Team</h1>
         </div>
-        <p className="text-gray-600 dark:text-gray-300">Register a new team in the league</p>
+        <p className="text-gray-600 dark:text-gray-300">Register a new team in the union</p>
       </div>
 
       <div className="card">
         <form onSubmit={handleSubmit} className="space-y-6">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg dark:bg-red-900 dark:border-red-700 dark:text-red-200">
               {error}
             </div>
           )}
@@ -96,20 +129,46 @@ export const CreateTeam = () => {
             </div>
 
             <div className="md:col-span-2">
+              <label className="label">Union (Optional)</label>
+              <select
+                name="unionId"
+                className="input"
+                value={formData.unionId}
+                onChange={handleChange}
+              >
+                <option value="">Select a union (optional)</option>
+                {unions.map((union: any) => (
+                  <option key={union.id} value={union.id}>
+                    {union.name}
+                  </option>
+                ))}
+              </select>
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                Select a union first to see its divisions
+              </p>
+            </div>
+
+            <div className="md:col-span-2">
               <label className="label">Division (Optional)</label>
               <select
                 name="divisionId"
                 className="input"
                 value={formData.divisionId}
                 onChange={handleChange}
+                disabled={!formData.unionId}
               >
-                <option value="">Select a division (optional)</option>
-                {divisions.map((div: any) => (
+                <option value="">
+                  {formData.unionId ? 'Select a division (optional)' : 'Select a union first'}
+                </option>
+                {filteredDivisions.map((div: any) => (
                   <option key={div.id} value={div.id}>
-                    {div.name}
+                    {div.name} {div.type && `(${div.type})`}
                   </option>
                 ))}
               </select>
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                {formData.unionId ? 'Showing divisions from selected union' : 'Select a union to see its divisions'}
+              </p>
             </div>
 
             <div className="md:col-span-2">
