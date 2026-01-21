@@ -2,9 +2,10 @@ import { IsString, IsOptional, IsUUID, IsEmail, IsBoolean } from 'class-validato
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateTeamDto {
-  @ApiProperty()
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsUUID()
-  divisionId: string;
+  divisionId?: string;
 
   @ApiProperty({ example: 'Warriors RFC' })
   @IsString()
@@ -14,6 +15,11 @@ export class CreateTeamDto {
   @IsOptional()
   @IsString()
   shortName?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  logo?: string;
 
   @ApiPropertyOptional()
   @IsOptional()

@@ -18,10 +18,10 @@ export class Team {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('uuid')
+  @Column('uuid', { nullable: true })
   divisionId: string;
 
-  @ManyToOne(() => Division, (division) => division.teams)
+  @ManyToOne(() => Division, (division) => division.teams, { nullable: true })
   @JoinColumn({ name: 'divisionId' })
   division: Division;
 

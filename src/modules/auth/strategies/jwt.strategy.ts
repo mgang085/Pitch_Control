@@ -24,19 +24,24 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload) {
-    const user = await this.usersService.findOne(payload.sub);
+    try {
+      const user = await this.usersService.findOne(payload.sub);
 
-    if (!user || !user.isActive) {
-      throw new UnauthorizedException();
+      if (!user || !user.isActive) {
+        throw new UnauthorizedException('Invalid credentials');
+      }
+
+      const roles = await this.usersService.getUserRoles(user.id);
+
+      return {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        roles,
+      };
+    } catch (error) {
+      // If user not found or any other error, force re-authentication
+      throw new UnauthorizedException('Please login again');
     }
-
-    const roles = await this.usersService.getUserRoles(user.id);
-
-    return {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      roles,
-    };
   }
 }

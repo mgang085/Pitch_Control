@@ -11,6 +11,7 @@ export const CreateTeam = () => {
   const [formData, setFormData] = useState({
     name: '',
     divisionId: '',
+    logo: '',
     homeVenue: '',
     presidentName: '',
     presidentEmail: '',
@@ -59,10 +60,10 @@ export const CreateTeam = () => {
     <div className="max-w-4xl mx-auto">
       <div className="mb-6">
         <div className="flex items-center space-x-3 mb-2">
-          <Users className="w-8 h-8 text-primary-600" />
-          <h1 className="text-3xl font-bold text-gray-900">Create New Team</h1>
+          <Users className="w-8 h-8 text-primary-600 dark:text-primary-400" />
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Create New Team</h1>
         </div>
-        <p className="text-gray-600">Register a new team in the league</p>
+        <p className="text-gray-600 dark:text-gray-300">Register a new team in the league</p>
       </div>
 
       <div className="card">
@@ -88,21 +89,33 @@ export const CreateTeam = () => {
             </div>
 
             <div>
-              <label className="label">Division *</label>
+              <label className="label">Division (Optional)</label>
               <select
                 name="divisionId"
                 className="input"
                 value={formData.divisionId}
                 onChange={handleChange}
-                required
               >
-                <option value="">Select a division</option>
+                <option value="">Select a division (optional)</option>
                 {divisions.map((div: any) => (
                   <option key={div.id} value={div.id}>
                     {div.name}
                   </option>
                 ))}
               </select>
+            </div>
+
+            <div>
+              <label className="label">Team Logo URL</label>
+              <input
+                type="url"
+                name="logo"
+                className="input"
+                value={formData.logo}
+                onChange={handleChange}
+                placeholder="https://example.com/team-logo.png"
+              />
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">Optional: URL to your team logo</p>
             </div>
 
             <div>

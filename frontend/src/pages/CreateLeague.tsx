@@ -10,6 +10,7 @@ export const CreateLeague = () => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
+    logo: '',
     seasonStart: '',
     seasonEnd: '',
     isActive: true,
@@ -79,6 +80,19 @@ export const CreateLeague = () => {
               onChange={handleChange}
               placeholder="Brief description of the league..."
             />
+          </div>
+
+          <div>
+            <label className="label">Logo URL</label>
+            <input
+              type="url"
+              name="logo"
+              className="input"
+              value={formData.logo}
+              onChange={handleChange}
+              placeholder="https://example.com/logo.png"
+            />
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Optional: URL to your league logo image</p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">

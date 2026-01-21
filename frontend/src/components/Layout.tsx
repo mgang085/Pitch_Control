@@ -2,8 +2,8 @@ import React, { ReactNode } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { RugbyIcon } from './RugbyIcon';
 import {
-  Shield,
   LogOut,
   LogIn,
   Home,
@@ -59,12 +59,12 @@ export const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-950">
       {/* Top Navigation */}
-      <nav className="bg-white dark:bg-slate-900 shadow-md dark:border-b dark:border-slate-800">
+      <nav className="bg-white dark:bg-slate-800 shadow-md dark:border-b-2 dark:border-slate-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
               <Link to="/" className="flex items-center space-x-2">
-                <Shield className="w-8 h-8 text-primary-600 dark:text-primary-400" />
+                <RugbyIcon className="w-8 h-8 text-primary-600 dark:text-primary-400" />
                 <span className="text-xl font-bold text-gray-900 dark:text-white">Pitch Control</span>
               </Link>
 
@@ -78,8 +78,8 @@ export const Layout = ({ children }: LayoutProps) => {
                       to={item.href}
                       className={`px-3 py-2 rounded-md text-sm font-medium flex items-center space-x-2 ${
                         isActive(item.href)
-                          ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300'
-                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                          ? 'bg-primary-100 text-primary-700 dark:bg-primary-600 dark:text-white'
+                          : 'text-gray-700 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-slate-700'
                       }`}
                     >
                       <Icon className="w-4 h-4" />
@@ -151,8 +151,8 @@ export const Layout = ({ children }: LayoutProps) => {
                     onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium ${
                       isActive(item.href)
-                        ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        ? 'bg-primary-100 text-primary-700 dark:bg-primary-600 dark:text-white'
+                        : 'text-gray-700 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-slate-700'
                     }`}
                   >
                     <Icon className="w-5 h-5" />
