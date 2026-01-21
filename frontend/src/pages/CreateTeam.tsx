@@ -130,7 +130,8 @@ export const CreateTeam = () => {
 
             <div className="md:col-span-2 p-4 bg-blue-50 border border-blue-200 rounded-lg dark:bg-blue-900 dark:border-blue-700">
               <p className="text-sm text-blue-800 dark:text-blue-200">
-                <strong>Note:</strong> Teams must be assigned to a Union and Division to participate in matches and appear in standings.
+                <strong>Hierarchy:</strong> Unions contain Divisions, and Teams are assigned to Divisions within a Union.
+                Select a Union first, then choose a Division within that Union. Teams must be assigned to both to participate in matches and appear in standings.
               </p>
             </div>
 

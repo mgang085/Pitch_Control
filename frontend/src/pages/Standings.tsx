@@ -98,6 +98,14 @@ export const Standings = () => {
         </div>
       ) : (
         <>
+          {/* Hierarchy Explanation */}
+          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg dark:bg-blue-900 dark:border-blue-700">
+            <p className="text-sm text-blue-800 dark:text-blue-200">
+              <strong>Hierarchy:</strong> Unions contain Divisions, and Divisions contain Teams.
+              Select a Union first, then choose a Division within that Union to view team standings.
+            </p>
+          </div>
+
           {/* Union and Division Selectors */}
           <div className="card">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
