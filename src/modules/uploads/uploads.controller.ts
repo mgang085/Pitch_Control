@@ -10,7 +10,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiConsumes, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @ApiTags('uploads')
 @Controller('uploads')
