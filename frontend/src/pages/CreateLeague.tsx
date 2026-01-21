@@ -42,10 +42,10 @@ export const CreateLeague = () => {
     <div className="max-w-2xl mx-auto">
       <div className="mb-6">
         <div className="flex items-center space-x-3 mb-2">
-          <Trophy className="w-8 h-8 text-primary-600" />
-          <h1 className="text-3xl font-bold text-gray-900">Create New League</h1>
+          <Trophy className="w-8 h-8 text-primary-600 dark:text-primary-400" />
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50">Create New League</h1>
         </div>
-        <p className="text-gray-600">Set up a new rugby league</p>
+        <p className="text-gray-600 dark:text-gray-300">Set up a new rugby league</p>
       </div>
 
       <div className="card">
@@ -114,7 +114,7 @@ export const CreateLeague = () => {
               onChange={handleChange}
               className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
             />
-            <label htmlFor="isActive" className="ml-2 block text-sm text-gray-900">
+            <label htmlFor="isActive" className="ml-2 block text-sm text-gray-900 dark:text-gray-100">
               League is active
             </label>
           </div>

@@ -57,9 +57,9 @@ export const Layout = ({ children }: LayoutProps) => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-950">
       {/* Top Navigation */}
-      <nav className="bg-white dark:bg-gray-800 shadow-md">
+      <nav className="bg-white dark:bg-slate-900 shadow-md dark:border-b dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
@@ -140,7 +140,7 @@ export const Layout = ({ children }: LayoutProps) => {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
+          <div className="md:hidden border-t border-gray-200 dark:border-slate-700">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navigation.map((item) => {
                 const Icon = item.icon;
@@ -162,7 +162,7 @@ export const Layout = ({ children }: LayoutProps) => {
               })}
             </div>
             {isAuthenticated && (
-              <div className="border-t border-gray-200 dark:border-gray-700 px-4 py-3">
+              <div className="border-t border-gray-200 dark:border-slate-700 px-4 py-3">
                 <p className="text-sm font-medium text-gray-900 dark:text-white">
                   {user?.firstName} {user?.lastName}
                 </p>

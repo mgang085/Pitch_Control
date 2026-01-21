@@ -14,6 +14,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AssignRoleDto } from './dto/assign-role.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -54,6 +55,19 @@ export class UsersController {
   @ApiOperation({ summary: 'Update user' })
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
+  }
+
+  @Post(':id/roles')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.LEAGUE_ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Assign role to user (Admin only)' })
+  assignRole(@Param('id') id: string, @Body() assignRoleDto: AssignRoleDto) {
+    return this.usersService.assignRole(
+      id,
+      assignRoleDto.leagueId || null,
+      assignRoleDto.role,
+    );
   }
 
   @Delete(':id')
