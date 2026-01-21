@@ -8,6 +8,7 @@ import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
 import { Leagues } from './pages/Leagues';
 import { CreateLeague } from './pages/CreateLeague';
+import { EditUnion } from './pages/EditUnion';
 import { CreateDivision } from './pages/CreateDivision';
 import { Teams } from './pages/Teams';
 import { CreateTeam } from './pages/CreateTeam';
@@ -81,6 +82,17 @@ function App() {
                 <PrivateRoute>
                   <Layout>
                     <CreateLeague />
+                  </Layout>
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/unions/:id/edit"
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <EditUnion />
                   </Layout>
                 </PrivateRoute>
               }

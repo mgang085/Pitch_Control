@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, Plus, Calendar, Users, Layers } from 'lucide-react';
+import { Trophy, Plus, Calendar, Users, Layers, Edit, Eye } from 'lucide-react';
 import { unionsAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -70,9 +70,8 @@ export const Leagues = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {leagues.map((league: any) => (
-            <Link
+            <div
               key={league.id}
-              to={`/unions/${league.id}`}
               className="card hover:shadow-lg transition-shadow"
             >
               <div className="flex items-start justify-between mb-4">
@@ -99,7 +98,7 @@ export const Leagues = () => {
                 <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">{league.description}</p>
               )}
 
-              <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-300 pt-4 border-t border-gray-200 dark:border-slate-600">
+              <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-300 pt-4 border-t border-gray-200 dark:border-slate-600 mb-4">
                 <div className="flex items-center space-x-1">
                   <Users className="w-4 h-4" />
                   <span>{league.divisions?.length || 0} Divisions</span>
@@ -113,7 +112,26 @@ export const Leagues = () => {
                   </div>
                 )}
               </div>
-            </Link>
+
+              <div className="flex space-x-2">
+                <Link
+                  to={`/unions/${league.id}`}
+                  className="btn btn-secondary flex-1 flex items-center justify-center space-x-2"
+                >
+                  <Eye className="w-4 h-4" />
+                  <span>View</span>
+                </Link>
+                {isAdmin && (
+                  <Link
+                    to={`/unions/${league.id}/edit`}
+                    className="btn btn-primary flex-1 flex items-center justify-center space-x-2"
+                  >
+                    <Edit className="w-4 h-4" />
+                    <span>Edit</span>
+                  </Link>
+                )}
+              </div>
+            </div>
           ))}
         </div>
       )}
