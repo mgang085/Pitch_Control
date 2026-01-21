@@ -46,16 +46,16 @@ async function bootstrap() {
   // Swagger documentation
   const config = new DocumentBuilder()
     .setTitle('Pitch Control API')
-    .setDescription('Rugby League Management System API')
+    .setDescription('Rugby Union Management System API')
     .setVersion('1.0')
     .addBearerAuth()
     .addTag('auth', 'Authentication endpoints')
-    .addTag('leagues', 'League management')
+    .addTag('leagues', 'Union management')
     .addTag('divisions', 'Division management')
     .addTag('teams', 'Team management')
     .addTag('matches', 'Match management and scoring')
     .addTag('players', 'Player management')
-    .addTag('standings', 'League standings')
+    .addTag('standings', 'Union standings')
     .addTag('statistics', 'Statistics and reports')
     .build();
 

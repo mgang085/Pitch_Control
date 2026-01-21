@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Layers } from 'lucide-react';
-import { divisionsAPI, leaguesAPI } from '../services/api';
+import { divisionsAPI, unionsAPI } from '../services/api';
 
 export const CreateDivision = () => {
   const navigate = useNavigate();
@@ -21,10 +21,10 @@ export const CreateDivision = () => {
 
   const loadLeagues = async () => {
     try {
-      const response = await leaguesAPI.getAll();
+      const response = await unionsAPI.getAll();
       setLeagues(response.data);
     } catch (err) {
-      console.error('Failed to load leagues:', err);
+      console.error('Failed to load unions:', err);
     }
   };
 
@@ -39,7 +39,7 @@ export const CreateDivision = () => {
 
     try {
       await divisionsAPI.create(formData);
-      navigate('/leagues');
+      navigate('/unions');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to create division');
     } finally {
@@ -54,7 +54,7 @@ export const CreateDivision = () => {
           <Layers className="w-8 h-8 text-primary-600 dark:text-primary-400" />
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Create New Division</h1>
         </div>
-        <p className="text-gray-600 dark:text-gray-300">Add a division to your league</p>
+        <p className="text-gray-600 dark:text-gray-300">Add a division to your union</p>
       </div>
 
       <div className="card">
@@ -66,7 +66,7 @@ export const CreateDivision = () => {
           )}
 
           <div>
-            <label className="label">League *</label>
+            <label className="label">Union *</label>
             <select
               name="leagueId"
               className="input"
@@ -74,7 +74,7 @@ export const CreateDivision = () => {
               onChange={handleChange}
               required
             >
-              <option value="">Select a league</option>
+              <option value="">Select a union</option>
               {leagues.map((league: any) => (
                 <option key={league.id} value={league.id}>
                   {league.name}

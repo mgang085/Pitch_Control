@@ -28,7 +28,7 @@ function App() {
             <Route path="/register" element={<Register />} />
 
             <Route
-              path="/leagues"
+              path="/unions"
               element={
                 <Layout>
                   <Leagues />
@@ -76,7 +76,7 @@ function App() {
             />
 
             <Route
-              path="/leagues/new"
+              path="/unions/new"
               element={
                 <PrivateRoute>
                   <Layout>
@@ -130,8 +130,8 @@ function App() {
               }
             />
 
-            {/* Catch all - redirect to leagues for public access */}
-            <Route path="*" element={<Navigate to="/leagues" replace />} />
+            {/* Catch all - redirect to unions for public access */}
+            <Route path="*" element={<Navigate to="/unions" replace />} />
           </Routes>
         </Router>
       </AuthProvider>

@@ -7,10 +7,10 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
-import { League } from '../../leagues/entities/league.entity';
+import { Union } from '../../leagues/entities/league.entity';
 import { Role } from '../../../common/enums/role.enum';
 
-@Entity('user_league_roles')
+@Entity('user_league_roles') // Table name stays for compatibility
 export class UserLeagueRole {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -23,11 +23,11 @@ export class UserLeagueRole {
   user: User;
 
   @Column('uuid', { nullable: true })
-  leagueId?: string;
+  leagueId?: string; // Column name stays for compatibility
 
-  @ManyToOne(() => League, (league) => league.userRoles, { nullable: true })
+  @ManyToOne(() => Union, (union) => union.userRoles, { nullable: true })
   @JoinColumn({ name: 'leagueId' })
-  league?: League;
+  union?: Union;
 
   @Column({
     type: 'enum',

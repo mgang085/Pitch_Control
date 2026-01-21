@@ -10,8 +10,8 @@ import { Division } from '../../divisions/entities/division.entity';
 import { UserLeagueRole } from '../../users/entities/user-league-role.entity';
 import { BonusPointRule } from './bonus-point-rule.entity';
 
-@Entity('leagues')
-export class League {
+@Entity('leagues') // Table name stays 'leagues' for compatibility
+export class Union {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

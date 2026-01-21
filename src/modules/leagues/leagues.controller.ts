@@ -27,21 +27,21 @@ export class LeaguesController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.LEAGUE_ADMIN)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create a new league (Admin only)' })
+  @ApiOperation({ summary: 'Create a new union (Admin only)' })
   create(@Body() createLeagueDto: CreateLeagueDto) {
     return this.leaguesService.create(createLeagueDto);
   }
 
   @Get()
   @Public()
-  @ApiOperation({ summary: 'Get all leagues' })
+  @ApiOperation({ summary: 'Get all unions' })
   findAll() {
     return this.leaguesService.findAll();
   }
 
   @Get(':id')
   @Public()
-  @ApiOperation({ summary: 'Get league by ID' })
+  @ApiOperation({ summary: 'Get union by ID' })
   findOne(@Param('id') id: string) {
     return this.leaguesService.findOne(id);
   }
@@ -50,7 +50,7 @@ export class LeaguesController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.LEAGUE_ADMIN)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update league (Admin only)' })
+  @ApiOperation({ summary: 'Update union (Admin only)' })
   update(@Param('id') id: string, @Body() updateLeagueDto: UpdateLeagueDto) {
     return this.leaguesService.update(id, updateLeagueDto);
   }
@@ -59,7 +59,7 @@ export class LeaguesController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.LEAGUE_ADMIN)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete league (Admin only)' })
+  @ApiOperation({ summary: 'Delete union (Admin only)' })
   remove(@Param('id') id: string) {
     return this.leaguesService.remove(id);
   }

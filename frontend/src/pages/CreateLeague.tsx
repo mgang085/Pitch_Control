@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trophy } from 'lucide-react';
-import { leaguesAPI } from '../services/api';
+import { unionsAPI } from '../services/api';
 
 export const CreateLeague = () => {
   const navigate = useNavigate();
@@ -33,10 +33,10 @@ export const CreateLeague = () => {
     setLoading(true);
 
     try {
-      await leaguesAPI.create(formData);
-      navigate('/leagues');
+      await unionsAPI.create(formData);
+      navigate('/unions');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to create league');
+      setError(err.response?.data?.message || 'Failed to create union');
     } finally {
       setLoading(false);
     }
@@ -47,9 +47,9 @@ export const CreateLeague = () => {
       <div className="mb-6">
         <div className="flex items-center space-x-3 mb-2">
           <Trophy className="w-8 h-8 text-primary-600 dark:text-primary-400" />
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50">Create New League</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50">Create New Union</h1>
         </div>
-        <p className="text-gray-600 dark:text-gray-300">Set up a new rugby league</p>
+        <p className="text-gray-600 dark:text-gray-300">Set up a new rugby union</p>
       </div>
 
       <div className="card">
@@ -61,7 +61,7 @@ export const CreateLeague = () => {
           )}
 
           <div>
-            <label className="label">League Name *</label>
+            <label className="label">Union Name *</label>
             <input
               type="text"
               name="name"
@@ -69,7 +69,7 @@ export const CreateLeague = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              placeholder="e.g., Premier Division 2024"
+              placeholder="e.g., National Rugby Union"
             />
           </div>
 
@@ -81,7 +81,7 @@ export const CreateLeague = () => {
               rows={4}
               value={formData.description}
               onChange={handleChange}
-              placeholder="Brief description of the league..."
+              placeholder="Brief description of the union..."
             />
           </div>
 
@@ -95,7 +95,7 @@ export const CreateLeague = () => {
               onChange={handleChange}
               placeholder="https://example.com/logo.png"
             />
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Optional: URL to your league logo image</p>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Optional: URL to your union logo image</p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -183,7 +183,7 @@ export const CreateLeague = () => {
               disabled={loading}
               className="btn btn-primary flex-1"
             >
-              {loading ? 'Creating...' : 'Create League'}
+              {loading ? 'Creating...' : 'Create Union'}
             </button>
             <button
               type="button"

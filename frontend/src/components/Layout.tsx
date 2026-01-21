@@ -43,7 +43,7 @@ export const Layout = ({ children }: LayoutProps) => {
   // Show all navigation items for authenticated users, only public ones for guests
   const allNavigation = [
     { name: 'Dashboard', href: '/', icon: Home, requiresAuth: true, adminOnly: false },
-    { name: 'Leagues', href: '/leagues', icon: Trophy, requiresAuth: false, adminOnly: false },
+    { name: 'Unions', href: '/unions', icon: Trophy, requiresAuth: false, adminOnly: false },
     { name: 'Teams', href: '/teams', icon: Users, requiresAuth: false, adminOnly: false },
     { name: 'Matches', href: '/matches', icon: Calendar, requiresAuth: false, adminOnly: false },
     { name: 'Standings', href: '/standings', icon: BarChart3, requiresAuth: false, adminOnly: false },

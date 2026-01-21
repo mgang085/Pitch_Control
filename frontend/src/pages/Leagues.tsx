@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Trophy, Plus, Calendar, Users, Layers } from 'lucide-react';
-import { leaguesAPI } from '../services/api';
+import { unionsAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
 export const Leagues = () => {
@@ -15,10 +15,10 @@ export const Leagues = () => {
 
   const loadLeagues = async () => {
     try {
-      const response = await leaguesAPI.getAll();
+      const response = await unionsAPI.getAll();
       setLeagues(response.data);
     } catch (error) {
-      console.error('Failed to load leagues:', error);
+      console.error('Failed to load unions:', error);
     } finally {
       setLoading(false);
     }
@@ -30,8 +30,8 @@ export const Leagues = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Leagues</h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-2">Browse and manage rugby leagues</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Unions</h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">Browse and manage rugby unions</p>
         </div>
         {isAdmin && (
           <div className="flex space-x-3">
@@ -39,9 +39,9 @@ export const Leagues = () => {
               <Layers className="w-5 h-5" />
               <span>Create Division</span>
             </Link>
-            <Link to="/leagues/new" className="btn btn-primary flex items-center space-x-2">
+            <Link to="/unions/new" className="btn btn-primary flex items-center space-x-2">
               <Plus className="w-5 h-5" />
-              <span>Create League</span>
+              <span>Create Union</span>
             </Link>
           </div>
         )}
@@ -49,21 +49,21 @@ export const Leagues = () => {
 
       {loading ? (
         <div className="text-center py-12">
-          <p className="text-gray-600 dark:text-gray-300">Loading leagues...</p>
+          <p className="text-gray-600 dark:text-gray-300">Loading unions...</p>
         </div>
       ) : leagues.length === 0 ? (
         <div className="card text-center py-12">
           <Trophy className="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No leagues yet</h3>
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No unions yet</h3>
           <p className="text-gray-600 dark:text-gray-300 mb-6">
             {isAdmin
-              ? 'Create your first league to get started!'
-              : 'Check back soon for available leagues.'}
+              ? 'Create your first union to get started!'
+              : 'Check back soon for available unions.'}
           </p>
           {isAdmin && (
-            <Link to="/leagues/new" className="btn btn-primary inline-flex items-center space-x-2">
+            <Link to="/unions/new" className="btn btn-primary inline-flex items-center space-x-2">
               <Plus className="w-5 h-5" />
-              <span>Create First League</span>
+              <span>Create First Union</span>
             </Link>
           )}
         </div>
@@ -72,7 +72,7 @@ export const Leagues = () => {
           {leagues.map((league: any) => (
             <Link
               key={league.id}
-              to={`/leagues/${league.id}`}
+              to={`/unions/${league.id}`}
               className="card hover:shadow-lg transition-shadow"
             >
               <div className="flex items-start justify-between mb-4">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Trophy, Calendar, Plus } from 'lucide-react';
-import { leaguesAPI, matchesAPI } from '../services/api';
+import { unionsAPI, matchesAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
 export const Dashboard = () => {
@@ -17,7 +17,7 @@ export const Dashboard = () => {
   const loadDashboardData = async () => {
     try {
       const [leaguesRes, matchesRes] = await Promise.all([
-        leaguesAPI.getAll(),
+        unionsAPI.getAll(),
         matchesAPI.getAll(),
       ]);
       setLeagues(leaguesRes.data);
@@ -32,7 +32,7 @@ export const Dashboard = () => {
   const isAdmin = hasRole('LEAGUE_ADMIN');
 
   const stats = [
-    { name: 'Total Leagues', value: leagues.length, icon: Trophy, color: 'bg-blue-500' },
+    { name: 'Total Unions', value: leagues.length, icon: Trophy, color: 'bg-blue-500' },
     { name: 'Upcoming Matches', value: upcomingMatches.length, icon: Calendar, color: 'bg-green-500' },
   ];
 
@@ -44,7 +44,7 @@ export const Dashboard = () => {
             Welcome back, {user?.firstName}!
           </h1>
           <p className="text-gray-600 mt-2">
-            Here's what's happening in your rugby leagues
+            Here's what's happening in your rugby unions
           </p>
         </div>
       </div>
@@ -75,11 +75,11 @@ export const Dashboard = () => {
           <h2 className="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Link
-              to="/leagues/new"
+              to="/unions/new"
               className="flex items-center space-x-3 p-4 rounded-lg border-2 border-dashed border-gray-300 hover:border-primary-500 hover:bg-primary-50 transition-colors"
             >
               <Plus className="w-5 h-5 text-primary-600" />
-              <span className="font-medium text-gray-700">Create League</span>
+              <span className="font-medium text-gray-700">Create Union</span>
             </Link>
             <Link
               to="/teams/new"
@@ -99,24 +99,24 @@ export const Dashboard = () => {
         </div>
       )}
 
-      {/* Recent Leagues */}
+      {/* Recent Unions */}
       <div className="card">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-gray-900">Active Leagues</h2>
-          <Link to="/leagues" className="text-primary-600 hover:text-primary-700 font-medium">
+          <h2 className="text-xl font-bold text-gray-900">Active Unions</h2>
+          <Link to="/unions" className="text-primary-600 hover:text-primary-700 font-medium">
             View all →
           </Link>
         </div>
         {loading ? (
           <p className="text-gray-600">Loading...</p>
         ) : leagues.length === 0 ? (
-          <p className="text-gray-600">No leagues yet. Create one to get started!</p>
+          <p className="text-gray-600">No unions yet. Create one to get started!</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {leagues.slice(0, 6).map((league: any) => (
               <Link
                 key={league.id}
-                to={`/leagues/${league.id}`}
+                to={`/unions/${league.id}`}
                 className="p-4 border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition-all"
               >
                 <div className="flex items-center space-x-3">

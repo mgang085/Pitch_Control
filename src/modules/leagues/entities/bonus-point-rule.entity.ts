@@ -6,7 +6,7 @@ import {
   CreateDateColumn,
   JoinColumn,
 } from 'typeorm';
-import { League } from './league.entity';
+import { Union } from './league.entity';
 
 export enum BonusPointType {
   TRIES_SCORED = 'TRIES_SCORED',
@@ -20,11 +20,11 @@ export class BonusPointRule {
   id: string;
 
   @Column('uuid')
-  leagueId: string;
+  leagueId: string; // Column name stays for compatibility
 
-  @ManyToOne(() => League, (league) => league.bonusPointRules)
+  @ManyToOne(() => Union, (union) => union.bonusPointRules)
   @JoinColumn({ name: 'leagueId' })
-  league: League;
+  union: Union;
 
   @Column({
     type: 'enum',

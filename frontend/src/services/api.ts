@@ -55,14 +55,17 @@ export const authAPI = {
   getProfile: () => api.get('/auth/profile'),
 };
 
-// Leagues API
-export const leaguesAPI = {
+// Unions API (endpoints still use /leagues for backend compatibility)
+export const unionsAPI = {
   getAll: () => api.get('/leagues'),
   getOne: (id: string) => api.get(`/leagues/${id}`),
   create: (data: any) => api.post('/leagues', data),
   update: (id: string, data: any) => api.patch(`/leagues/${id}`, data),
   delete: (id: string) => api.delete(`/leagues/${id}`),
 };
+
+// Backward compatibility alias (deprecated, use unionsAPI)
+export const leaguesAPI = unionsAPI;
 
 // Divisions API
 export const divisionsAPI = {

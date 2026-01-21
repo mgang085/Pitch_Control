@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
   JoinColumn,
 } from 'typeorm';
-import { League } from '../../leagues/entities/league.entity';
+import { Union } from '../../leagues/entities/league.entity';
 import { Team } from '../../teams/entities/team.entity';
 import { DivisionType } from '../../../common/enums/division-type.enum';
 
@@ -18,11 +18,11 @@ export class Division {
   id: string;
 
   @Column('uuid')
-  leagueId: string;
+  leagueId: string; // Column name stays for compatibility
 
-  @ManyToOne(() => League, (league) => league.divisions)
+  @ManyToOne(() => Union, (union) => union.divisions)
   @JoinColumn({ name: 'leagueId' })
-  league: League;
+  union: Union;
 
   @Column()
   name: string;
