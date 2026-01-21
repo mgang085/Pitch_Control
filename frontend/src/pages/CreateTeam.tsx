@@ -8,9 +8,9 @@ export const CreateTeam = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [unions, setUnions] = useState([]);
-  const [divisions, setDivisions] = useState([]);
-  const [filteredDivisions, setFilteredDivisions] = useState([]);
+  const [unions, setUnions] = useState<any[]>([]);
+  const [divisions, setDivisions] = useState<any[]>([]);
+  const [filteredDivisions, setFilteredDivisions] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     unionId: '',
