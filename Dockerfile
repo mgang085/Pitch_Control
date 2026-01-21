@@ -22,6 +22,10 @@ RUN npm ci --only=production && npm cache clean --force
 
 COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
 
+# Create uploads directory with proper permissions
+RUN mkdir -p uploads/logos && \
+    chown -R nestjs:nodejs uploads
+
 USER nestjs
 
 EXPOSE 3000
