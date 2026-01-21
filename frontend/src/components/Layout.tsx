@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import {
   Shield,
   LogOut,
+  LogIn,
   Home,
   Trophy,
   Users,
@@ -18,7 +19,7 @@ interface LayoutProps {
 }
 
 export const Layout = ({ children }: LayoutProps) => {
-  const { user, logout, hasRole } = useAuth();
+  const { user, logout, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -28,13 +29,22 @@ export const Layout = ({ children }: LayoutProps) => {
     navigate('/login');
   };
 
-  const navigation = [
-    { name: 'Dashboard', href: '/', icon: Home },
-    { name: 'Leagues', href: '/leagues', icon: Trophy },
-    { name: 'Teams', href: '/teams', icon: Users },
-    { name: 'Matches', href: '/matches', icon: Calendar },
-    { name: 'Standings', href: '/standings', icon: BarChart3 },
+  const handleLogin = () => {
+    navigate('/login');
+  };
+
+  // Show all navigation items for authenticated users, only public ones for guests
+  const allNavigation = [
+    { name: 'Dashboard', href: '/', icon: Home, requiresAuth: true },
+    { name: 'Leagues', href: '/leagues', icon: Trophy, requiresAuth: false },
+    { name: 'Teams', href: '/teams', icon: Users, requiresAuth: false },
+    { name: 'Matches', href: '/matches', icon: Calendar, requiresAuth: false },
+    { name: 'Standings', href: '/standings', icon: BarChart3, requiresAuth: false },
   ];
+
+  const navigation = allNavigation.filter(
+    (item) => !item.requiresAuth || isAuthenticated
+  );
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -74,19 +84,31 @@ export const Layout = ({ children }: LayoutProps) => {
 
             {/* User Menu */}
             <div className="flex items-center space-x-4">
-              <div className="hidden md:block text-right">
-                <p className="text-sm font-medium text-gray-900">
-                  {user?.firstName} {user?.lastName}
-                </p>
-                <p className="text-xs text-gray-500">{user?.roles?.[0] || 'User'}</p>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="btn btn-secondary flex items-center space-x-2"
-              >
-                <LogOut className="w-4 h-4" />
-                <span className="hidden sm:inline">Logout</span>
-              </button>
+              {isAuthenticated ? (
+                <>
+                  <div className="hidden md:block text-right">
+                    <p className="text-sm font-medium text-gray-900">
+                      {user?.firstName} {user?.lastName}
+                    </p>
+                    <p className="text-xs text-gray-500">{user?.roles?.[0] || 'User'}</p>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="btn btn-secondary flex items-center space-x-2"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span className="hidden sm:inline">Logout</span>
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={handleLogin}
+                  className="btn btn-primary flex items-center space-x-2"
+                >
+                  <LogIn className="w-4 h-4" />
+                  <span>Login</span>
+                </button>
+              )}
 
               {/* Mobile menu button */}
               <button
@@ -122,12 +144,14 @@ export const Layout = ({ children }: LayoutProps) => {
                 );
               })}
             </div>
-            <div className="border-t border-gray-200 px-4 py-3">
-              <p className="text-sm font-medium text-gray-900">
-                {user?.firstName} {user?.lastName}
-              </p>
-              <p className="text-xs text-gray-500">{user?.email}</p>
-            </div>
+            {isAuthenticated && (
+              <div className="border-t border-gray-200 px-4 py-3">
+                <p className="text-sm font-medium text-gray-900">
+                  {user?.firstName} {user?.lastName}
+                </p>
+                <p className="text-xs text-gray-500">{user?.email}</p>
+              </div>
+            )}
           </div>
         )}
       </nav>

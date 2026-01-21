@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, Plus, Calendar } from 'lucide-react';
+import { Trophy, Plus, Calendar, Users } from 'lucide-react';
 import { leaguesAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
 export const Leagues = () => {
   const [leagues, setLeagues] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { hasRole } = useAuth();
+  const { hasRole, isAuthenticated } = useAuth();
 
   useEffect(() => {
     loadLeagues();
@@ -24,7 +24,7 @@ export const Leagues = () => {
     }
   };
 
-  const isAdmin = hasRole('LEAGUE_ADMIN');
+  const isAdmin = isAuthenticated && hasRole('LEAGUE_ADMIN');
 
   return (
     <div className="space-y-6">

@@ -15,11 +15,44 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          {/* Public routes */}
+          {/* Public routes - no auth required */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Private routes */}
+          <Route
+            path="/leagues"
+            element={
+              <Layout>
+                <Leagues />
+              </Layout>
+            }
+          />
+          <Route
+            path="/teams"
+            element={
+              <Layout>
+                <Teams />
+              </Layout>
+            }
+          />
+          <Route
+            path="/matches"
+            element={
+              <Layout>
+                <Matches />
+              </Layout>
+            }
+          />
+          <Route
+            path="/standings"
+            element={
+              <Layout>
+                <Standings />
+              </Layout>
+            }
+          />
+
+          {/* Private routes - auth required */}
           <Route
             path="/"
             element={
@@ -30,49 +63,9 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route
-            path="/leagues"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <Leagues />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/teams"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <Teams />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/matches"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <Matches />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/standings"
-            element={
-              <PrivateRoute>
-                <Layout>
-                  <Standings />
-                </Layout>
-              </PrivateRoute>
-            }
-          />
 
-          {/* Catch all */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          {/* Catch all - redirect to leagues for public access */}
+          <Route path="*" element={<Navigate to="/leagues" replace />} />
         </Routes>
       </Router>
     </AuthProvider>

@@ -26,9 +26,16 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      // Only redirect to login if user was previously authenticated
+      const hadToken = localStorage.getItem('token');
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      window.location.href = '/login';
+
+      // Only redirect if user had a token (was logged in but token expired/invalid)
+      // Don't redirect for public pages where 401 is expected
+      if (hadToken && !window.location.pathname.includes('/login')) {
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
