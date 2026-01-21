@@ -12,6 +12,7 @@ import { EditUnion } from './pages/EditUnion';
 import { CreateDivision } from './pages/CreateDivision';
 import { Teams } from './pages/Teams';
 import { CreateTeam } from './pages/CreateTeam';
+import { EditTeam } from './pages/EditTeam';
 import { Matches } from './pages/Matches';
 import { CreateMatch } from './pages/CreateMatch';
 import { Standings } from './pages/Standings';
@@ -115,6 +116,17 @@ function App() {
                 <PrivateRoute>
                   <Layout>
                     <CreateTeam />
+                  </Layout>
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/teams/:id/edit"
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <EditTeam />
                   </Layout>
                 </PrivateRoute>
               }

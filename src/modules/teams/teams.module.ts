@@ -4,11 +4,13 @@ import { TeamsController } from './teams.controller';
 import { TeamsService } from './teams.service';
 import { Team } from './entities/team.entity';
 import { TeamContact } from './entities/team-contact.entity';
+import { UserTeamRole } from './entities/user-team-role.entity';
+import { TeamRolesGuard } from '../../common/guards/team-roles.guard';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Team, TeamContact])],
+  imports: [TypeOrmModule.forFeature([Team, TeamContact, UserTeamRole])],
   controllers: [TeamsController],
-  providers: [TeamsService],
+  providers: [TeamsService, TeamRolesGuard],
   exports: [TeamsService],
 })
 export class TeamsModule {}

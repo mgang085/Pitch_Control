@@ -81,8 +81,13 @@ export const teamsAPI = {
   getAll: (divisionId?: string) => api.get('/teams', { params: { divisionId } }),
   getOne: (id: string) => api.get(`/teams/${id}`),
   create: (data: any) => api.post('/teams', data),
+  updateInfo: (id: string, data: any) => api.put(`/teams/${id}/info`, data),
   update: (id: string, data: any) => api.patch(`/teams/${id}`, data),
   delete: (id: string) => api.delete(`/teams/${id}`),
+  getOfficers: (id: string) => api.get(`/teams/${id}/officers`),
+  assignOfficer: (id: string, userId: string, role: string) =>
+    api.post(`/teams/${id}/officers`, { userId, role }),
+  removeOfficer: (id: string, userId: string) => api.delete(`/teams/${id}/officers/${userId}`),
 };
 
 // Players API
