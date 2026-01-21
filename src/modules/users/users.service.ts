@@ -81,7 +81,7 @@ export class UsersService {
 
   async assignRole(userId: string, leagueId: string | null, role: Role): Promise<UserLeagueRole> {
     const existingRole = await this.userLeagueRoleRepository.findOne({
-      where: { userId, leagueId },
+      where: { userId, leagueId: leagueId ?? undefined },
     });
 
     if (existingRole) {
@@ -91,7 +91,7 @@ export class UsersService {
 
     const userLeagueRole = this.userLeagueRoleRepository.create({
       userId,
-      leagueId,
+      leagueId: leagueId ?? undefined,
       role,
     });
 

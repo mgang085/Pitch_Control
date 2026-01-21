@@ -23,11 +23,11 @@ export class UserLeagueRole {
   user: User;
 
   @Column('uuid', { nullable: true })
-  leagueId: string;
+  leagueId?: string;
 
-  @ManyToOne(() => League, (league) => league.userRoles)
+  @ManyToOne(() => League, (league) => league.userRoles, { nullable: true })
   @JoinColumn({ name: 'leagueId' })
-  league: League;
+  league?: League;
 
   @Column({
     type: 'enum',
