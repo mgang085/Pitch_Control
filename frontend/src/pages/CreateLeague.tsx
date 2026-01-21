@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trophy } from 'lucide-react';
 import { unionsAPI } from '../services/api';
+import { FileUpload } from '../components/FileUpload';
 
 export const CreateLeague = () => {
   const navigate = useNavigate();
@@ -85,18 +86,12 @@ export const CreateLeague = () => {
             />
           </div>
 
-          <div>
-            <label className="label">Logo URL</label>
-            <input
-              type="url"
-              name="logo"
-              className="input"
-              value={formData.logo}
-              onChange={handleChange}
-              placeholder="https://example.com/logo.png"
-            />
-            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Optional: URL to your union logo image</p>
-          </div>
+          <FileUpload
+            label="Union Logo"
+            value={formData.logo}
+            onChange={(url) => setFormData({ ...formData, logo: url })}
+            helpText="Upload your union logo image (PNG, JPG, SVG)"
+          />
 
           <div className="grid grid-cols-2 gap-4">
             <div>

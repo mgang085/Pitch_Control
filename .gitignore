@@ -39,3 +39,8 @@ coverage/
 .cache/
 temp/
 tmp/
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+!uploads/**/.gitkeep
