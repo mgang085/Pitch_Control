@@ -14,6 +14,9 @@ export const CreateLeague = () => {
     seasonStart: '',
     seasonEnd: '',
     isActive: true,
+    winPoints: 4,
+    drawPoints: 2,
+    lossPoints: 0,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -119,6 +122,47 @@ export const CreateLeague = () => {
             </div>
           </div>
 
+          <div className="border-t pt-6 dark:border-slate-600">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Point Settings</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">Configure how points are awarded for match results</p>
+
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <label className="label">Win Points</label>
+                <input
+                  type="number"
+                  name="winPoints"
+                  className="input"
+                  value={formData.winPoints}
+                  onChange={handleChange}
+                  min="0"
+                />
+              </div>
+              <div>
+                <label className="label">Draw Points</label>
+                <input
+                  type="number"
+                  name="drawPoints"
+                  className="input"
+                  value={formData.drawPoints}
+                  onChange={handleChange}
+                  min="0"
+                />
+              </div>
+              <div>
+                <label className="label">Loss Points</label>
+                <input
+                  type="number"
+                  name="lossPoints"
+                  className="input"
+                  value={formData.lossPoints}
+                  onChange={handleChange}
+                  min="0"
+                />
+              </div>
+            </div>
+          </div>
+
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -129,7 +173,7 @@ export const CreateLeague = () => {
               className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
             />
             <label htmlFor="isActive" className="ml-2 block text-sm text-gray-900 dark:text-gray-100">
-              League is active
+              Union is active
             </label>
           </div>
 

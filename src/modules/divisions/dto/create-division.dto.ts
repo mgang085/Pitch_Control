@@ -1,5 +1,6 @@
-import { IsString, IsOptional, IsUUID, IsInt, IsBoolean } from 'class-validator';
+import { IsString, IsOptional, IsUUID, IsInt, IsBoolean, IsEnum } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { DivisionType } from '../../../common/enums/division-type.enum';
 
 export class CreateDivisionDto {
   @ApiProperty()
@@ -9,6 +10,11 @@ export class CreateDivisionDto {
   @ApiProperty({ example: 'Premier Division' })
   @IsString()
   name: string;
+
+  @ApiPropertyOptional({ enum: DivisionType, example: DivisionType.MENS })
+  @IsOptional()
+  @IsEnum(DivisionType)
+  type?: DivisionType;
 
   @ApiPropertyOptional()
   @IsOptional()

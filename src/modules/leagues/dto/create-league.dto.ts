@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsDateString, IsBoolean } from 'class-validator';
+import { IsString, IsOptional, IsDateString, IsBoolean, IsInt, Min } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateLeagueDto {
@@ -30,4 +30,22 @@ export class CreateLeagueDto {
   @IsOptional()
   @IsBoolean()
   isActive?: boolean;
+
+  @ApiPropertyOptional({ example: 4, default: 4 })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  winPoints?: number;
+
+  @ApiPropertyOptional({ example: 2, default: 2 })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  drawPoints?: number;
+
+  @ApiPropertyOptional({ example: 0, default: 0 })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  lossPoints?: number;
 }

@@ -33,6 +33,15 @@ export class League {
   @Column({ type: 'date', nullable: true })
   seasonEnd: Date;
 
+  @Column({ type: 'int', default: 4 })
+  winPoints: number;
+
+  @Column({ type: 'int', default: 2 })
+  drawPoints: number;
+
+  @Column({ type: 'int', default: 0 })
+  lossPoints: number;
+
   @OneToMany(() => Division, (division) => division.league)
   divisions: Division[];
 

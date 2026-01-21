@@ -11,6 +11,7 @@ export const CreateDivision = () => {
   const [formData, setFormData] = useState({
     name: '',
     leagueId: '',
+    type: '',
     description: '',
   });
 
@@ -93,6 +94,22 @@ export const CreateDivision = () => {
               required
               placeholder="e.g., Division 1, Senior Division"
             />
+          </div>
+
+          <div>
+            <label className="label">Division Type</label>
+            <select
+              name="type"
+              className="input"
+              value={formData.type}
+              onChange={handleChange}
+            >
+              <option value="">Select type (optional)</option>
+              <option value="MENS">Men's</option>
+              <option value="WOMENS">Women's</option>
+              <option value="YOUTH_BOYS">Youth Boys</option>
+              <option value="YOUTH_GIRLS">Youth Girls</option>
+            </select>
           </div>
 
           <div>

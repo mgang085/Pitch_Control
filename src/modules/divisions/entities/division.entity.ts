@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { League } from '../../leagues/entities/league.entity';
 import { Team } from '../../teams/entities/team.entity';
+import { DivisionType } from '../../../common/enums/division-type.enum';
 
 @Entity('divisions')
 export class Division {
@@ -25,6 +26,13 @@ export class Division {
 
   @Column()
   name: string;
+
+  @Column({
+    type: 'enum',
+    enum: DivisionType,
+    nullable: true,
+  })
+  type: DivisionType;
 
   @Column({ type: 'text', nullable: true })
   description: string;
