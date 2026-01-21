@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, Users, Calendar, TrendingUp, Plus } from 'lucide-react';
+import { Trophy, Calendar, Plus } from 'lucide-react';
 import { leaguesAPI, matchesAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
