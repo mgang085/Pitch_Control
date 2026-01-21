@@ -21,7 +21,7 @@ export class DivisionsService {
     const where = leagueId ? { leagueId } : {};
     return this.divisionRepository.find({
       where,
-      relations: ['league', 'teams'],
+      relations: ['union', 'teams'],
       order: { level: 'ASC' },
     });
   }
@@ -29,7 +29,7 @@ export class DivisionsService {
   async findOne(id: string): Promise<Division> {
     const division = await this.divisionRepository.findOne({
       where: { id },
-      relations: ['league', 'teams'],
+      relations: ['union', 'teams'],
     });
 
     if (!division) {

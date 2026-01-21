@@ -35,14 +35,14 @@ export class UsersService {
 
   async findAll(): Promise<User[]> {
     return this.userRepository.find({
-      relations: ['leagueRoles', 'leagueRoles.league'],
+      relations: ['leagueRoles', 'leagueRoles.union'],
     });
   }
 
   async findOne(id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { id },
-      relations: ['leagueRoles', 'leagueRoles.league'],
+      relations: ['leagueRoles', 'leagueRoles.union'],
     });
 
     if (!user) {
@@ -55,14 +55,14 @@ export class UsersService {
   async findByEmail(email: string): Promise<User | null> {
     return this.userRepository.findOne({
       where: { email },
-      relations: ['leagueRoles', 'leagueRoles.league'],
+      relations: ['leagueRoles', 'leagueRoles.union'],
     });
   }
 
   async findByUsername(username: string): Promise<User | null> {
     return this.userRepository.findOne({
       where: { username },
-      relations: ['leagueRoles', 'leagueRoles.league'],
+      relations: ['leagueRoles', 'leagueRoles.union'],
     });
   }
 
