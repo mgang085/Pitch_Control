@@ -42,13 +42,13 @@ export class Union {
   @Column({ type: 'int', default: 0 })
   lossPoints: number;
 
-  @OneToMany(() => Division, (division) => division.league)
+  @OneToMany(() => Division, (division) => division.union)
   divisions: Division[];
 
-  @OneToMany(() => UserLeagueRole, (ulr) => ulr.league)
+  @OneToMany(() => UserLeagueRole, (ulr) => ulr.union)
   userRoles: UserLeagueRole[];
 
-  @OneToMany(() => BonusPointRule, (rule) => rule.league)
+  @OneToMany(() => BonusPointRule, (rule) => rule.union)
   bonusPointRules: BonusPointRule[];
 
   @CreateDateColumn()
