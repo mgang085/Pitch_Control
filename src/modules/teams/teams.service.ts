@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Team } from './entities/team.entity';
 import { TeamContact } from './entities/team-contact.entity';
 import { UserTeamRole } from './entities/user-team-role.entity';
+import { Division } from '../divisions/entities/division.entity';
 import { CreateTeamDto } from './dto/create-team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
 import { UpdateTeamInfoDto } from './dto/update-team-info.dto';
@@ -18,9 +19,34 @@ export class TeamsService {
     private readonly teamContactRepository: Repository<TeamContact>,
     @InjectRepository(UserTeamRole)
     private readonly userTeamRoleRepository: Repository<UserTeamRole>,
+    @InjectRepository(Division)
+    private readonly divisionRepository: Repository<Division>,
   ) {}
 
   async create(createTeamDto: CreateTeamDto): Promise<Team> {
+    // Validate union/division hierarchy
+    if (createTeamDto.divisionId) {
+      const division = await this.divisionRepository.findOne({
+        where: { id: createTeamDto.divisionId },
+      });
+
+      if (!division) {
+        throw new NotFoundException(`Division with ID ${createTeamDto.divisionId} not found`);
+      }
+
+      // Ensure the division belongs to the specified union
+      if (createTeamDto.unionId && division.leagueId !== createTeamDto.unionId) {
+        throw new BadRequestException(
+          `Division does not belong to the specified union. Division belongs to union ${division.leagueId}`,
+        );
+      }
+
+      // Auto-set unionId from division if not provided
+      if (!createTeamDto.unionId) {
+        createTeamDto.unionId = division.leagueId;
+      }
+    }
+
     const team = this.teamRepository.create(createTeamDto);
     return this.teamRepository.save(team);
   }
@@ -48,6 +74,33 @@ export class TeamsService {
 
   async update(id: string, updateTeamDto: UpdateTeamDto): Promise<Team> {
     const team = await this.findOne(id);
+
+    // Validate union/division hierarchy if changing division
+    if (updateTeamDto.divisionId && updateTeamDto.divisionId !== team.divisionId) {
+      const division = await this.divisionRepository.findOne({
+        where: { id: updateTeamDto.divisionId },
+      });
+
+      if (!division) {
+        throw new NotFoundException(`Division with ID ${updateTeamDto.divisionId} not found`);
+      }
+
+      // Determine the target unionId (use updateDto value or existing team value)
+      const targetUnionId = updateTeamDto.unionId !== undefined ? updateTeamDto.unionId : team.unionId;
+
+      // Ensure the division belongs to the specified union
+      if (targetUnionId && division.leagueId !== targetUnionId) {
+        throw new BadRequestException(
+          `Division does not belong to the specified union. Division belongs to union ${division.leagueId}`,
+        );
+      }
+
+      // Auto-update unionId to match division if not explicitly set
+      if (!updateTeamDto.unionId) {
+        updateTeamDto.unionId = division.leagueId;
+      }
+    }
+
     Object.assign(team, updateTeamDto);
     return this.teamRepository.save(team);
   }

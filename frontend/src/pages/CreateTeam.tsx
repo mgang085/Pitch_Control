@@ -128,15 +128,22 @@ export const CreateTeam = () => {
               />
             </div>
 
+            <div className="md:col-span-2 p-4 bg-blue-50 border border-blue-200 rounded-lg dark:bg-blue-900 dark:border-blue-700">
+              <p className="text-sm text-blue-800 dark:text-blue-200">
+                <strong>Note:</strong> Teams must be assigned to a Union and Division to participate in matches and appear in standings.
+              </p>
+            </div>
+
             <div className="md:col-span-2">
-              <label className="label">Union (Optional)</label>
+              <label className="label">Union *</label>
               <select
                 name="unionId"
                 className="input"
                 value={formData.unionId}
                 onChange={handleChange}
+                required
               >
-                <option value="">Select a union (optional)</option>
+                <option value="">Select a union</option>
                 {unions.map((union: any) => (
                   <option key={union.id} value={union.id}>
                     {union.name}
@@ -144,21 +151,22 @@ export const CreateTeam = () => {
                 ))}
               </select>
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                Select a union first to see its divisions
+                Divisions belong to unions - select a union first
               </p>
             </div>
 
             <div className="md:col-span-2">
-              <label className="label">Division (Optional)</label>
+              <label className="label">Division *</label>
               <select
                 name="divisionId"
                 className="input"
                 value={formData.divisionId}
                 onChange={handleChange}
-                disabled={!formData.unionId}
+                disabled={!formData.unionId || filteredDivisions.length === 0}
+                required
               >
                 <option value="">
-                  {formData.unionId ? 'Select a division (optional)' : 'Select a union first'}
+                  {!formData.unionId ? 'Select a union first' : filteredDivisions.length === 0 ? 'No divisions available' : 'Select a division'}
                 </option>
                 {filteredDivisions.map((div: any) => (
                   <option key={div.id} value={div.id}>
@@ -167,7 +175,11 @@ export const CreateTeam = () => {
                 ))}
               </select>
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                {formData.unionId ? 'Showing divisions from selected union' : 'Select a union to see its divisions'}
+                {formData.unionId
+                  ? filteredDivisions.length > 0
+                    ? `Showing ${filteredDivisions.length} division(s) from ${unions.find((u: any) => u.id === formData.unionId)?.name || 'selected union'}`
+                    : 'No divisions created for this union yet'
+                  : 'Divisions are filtered by union'}
               </p>
             </div>
 
