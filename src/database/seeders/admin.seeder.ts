@@ -1,8 +1,11 @@
 import { DataSource } from 'typeorm';
+import { User } from '../../modules/users/entities/user.entity';
+import { UserLeagueRole } from '../../modules/users/entities/user-league-role.entity';
+import { Role } from '../../common/enums/role.enum';
 
 export async function seedAdminUser(dataSource: DataSource) {
-  const userRepository = dataSource.getRepository('User');
-  const userLeagueRoleRepository = dataSource.getRepository('UserLeagueRole');
+  const userRepository = dataSource.getRepository(User);
+  const userLeagueRoleRepository = dataSource.getRepository(UserLeagueRole);
 
   // Check if admin already exists
   const existingAdmin = await userRepository.findOne({
@@ -15,7 +18,7 @@ export async function seedAdminUser(dataSource: DataSource) {
   }
 
   // Create admin user - password will be hashed by @BeforeInsert hook
-  const adminUser = await userRepository.save({
+  const adminUser = userRepository.create({
     email: 'admin@pitchcontrol.com',
     username: 'admin',
     password: 'Alamo123',
@@ -25,12 +28,16 @@ export async function seedAdminUser(dataSource: DataSource) {
     isActive: true,
   });
 
+  const savedAdmin = await userRepository.save(adminUser);
+
   // Assign LEAGUE_ADMIN role globally (leagueId = undefined for global role)
-  await userLeagueRoleRepository.save({
-    userId: adminUser.id,
+  const adminRole = userLeagueRoleRepository.create({
+    userId: savedAdmin.id,
     leagueId: undefined,
-    role: 'LEAGUE_ADMIN',
+    role: Role.LEAGUE_ADMIN,
   });
+
+  await userLeagueRoleRepository.save(adminRole);
 
   console.log('✅ Default admin user created successfully!');
   console.log('   Username: admin');
