@@ -9,6 +9,7 @@ import { TeamsModule } from './modules/teams/teams.module';
 import { MatchesModule } from './modules/matches/matches.module';
 import { PlayersModule } from './modules/players/players.module';
 import { StandingsModule } from './modules/standings/standings.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { StandingsModule } from './modules/standings/standings.module';
     }),
 
     // Feature modules
+    HealthModule,
     AuthModule,
     UsersModule,
     LeaguesModule,
