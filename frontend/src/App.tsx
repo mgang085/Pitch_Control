@@ -8,6 +8,7 @@ import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
 import { Leagues } from './pages/Leagues';
 import { CreateLeague } from './pages/CreateLeague';
+import { CreateDivision } from './pages/CreateDivision';
 import { Teams } from './pages/Teams';
 import { CreateTeam } from './pages/CreateTeam';
 import { Matches } from './pages/Matches';
@@ -80,6 +81,17 @@ function App() {
                 <PrivateRoute>
                   <Layout>
                     <CreateLeague />
+                  </Layout>
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/divisions/new"
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <CreateDivision />
                   </Layout>
                 </PrivateRoute>
               }

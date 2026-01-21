@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, Plus, Calendar, Users } from 'lucide-react';
+import { Trophy, Plus, Calendar, Users, Layers } from 'lucide-react';
 import { leaguesAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -30,26 +30,32 @@ export const Leagues = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Leagues</h1>
-          <p className="text-gray-600 mt-2">Browse and manage rugby leagues</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Leagues</h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">Browse and manage rugby leagues</p>
         </div>
         {isAdmin && (
-          <Link to="/leagues/new" className="btn btn-primary flex items-center space-x-2">
-            <Plus className="w-5 h-5" />
-            <span>Create League</span>
-          </Link>
+          <div className="flex space-x-3">
+            <Link to="/divisions/new" className="btn btn-secondary flex items-center space-x-2">
+              <Layers className="w-5 h-5" />
+              <span>Create Division</span>
+            </Link>
+            <Link to="/leagues/new" className="btn btn-primary flex items-center space-x-2">
+              <Plus className="w-5 h-5" />
+              <span>Create League</span>
+            </Link>
+          </div>
         )}
       </div>
 
       {loading ? (
         <div className="text-center py-12">
-          <p className="text-gray-600">Loading leagues...</p>
+          <p className="text-gray-600 dark:text-gray-300">Loading leagues...</p>
         </div>
       ) : leagues.length === 0 ? (
         <div className="card text-center py-12">
-          <Trophy className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No leagues yet</h3>
-          <p className="text-gray-600 mb-6">
+          <Trophy className="w-16 h-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No leagues yet</h3>
+          <p className="text-gray-600 dark:text-gray-300 mb-6">
             {isAdmin
               ? 'Create your first league to get started!'
               : 'Check back soon for available leagues.'}
@@ -71,17 +77,17 @@ export const Leagues = () => {
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center space-x-3">
-                  <div className="bg-primary-100 p-3 rounded-lg">
-                    <Trophy className="w-6 h-6 text-primary-600" />
+                  <div className="bg-primary-100 dark:bg-primary-900 p-3 rounded-lg">
+                    <Trophy className="w-6 h-6 text-primary-600 dark:text-primary-400" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 text-lg">{league.name}</h3>
+                    <h3 className="font-bold text-gray-900 dark:text-white text-lg">{league.name}</h3>
                     {league.isActive ? (
-                      <span className="inline-block px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
+                      <span className="inline-block px-2 py-1 text-xs font-semibold text-green-800 dark:text-green-200 bg-green-100 dark:bg-green-900 rounded-full">
                         Active
                       </span>
                     ) : (
-                      <span className="inline-block px-2 py-1 text-xs font-semibold text-gray-600 bg-gray-100 rounded-full">
+                      <span className="inline-block px-2 py-1 text-xs font-semibold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-full">
                         Inactive
                       </span>
                     )}
@@ -90,10 +96,10 @@ export const Leagues = () => {
               </div>
 
               {league.description && (
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">{league.description}</p>
+                <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2">{league.description}</p>
               )}
 
-              <div className="flex items-center justify-between text-sm text-gray-600 pt-4 border-t border-gray-200">
+              <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-300 pt-4 border-t border-gray-200 dark:border-slate-600">
                 <div className="flex items-center space-x-1">
                   <Users className="w-4 h-4" />
                   <span>{league.divisions?.length || 0} Divisions</span>

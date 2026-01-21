@@ -13,15 +13,8 @@ export const CreateTeam = () => {
     divisionId: '',
     logo: '',
     homeVenue: '',
-    presidentName: '',
-    presidentEmail: '',
-    presidentPhone: '',
-    coachName: '',
-    coachEmail: '',
-    coachPhone: '',
-    matchSecretaryName: '',
-    matchSecretaryEmail: '',
-    matchSecretaryPhone: '',
+    phoneNumber: '',
+    email: '',
   });
 
   useEffect(() => {
@@ -47,7 +40,20 @@ export const CreateTeam = () => {
     setLoading(true);
 
     try {
-      await teamsAPI.create(formData);
+      // Filter out empty fields and convert empty divisionId to undefined
+      const payload = {
+        ...formData,
+        divisionId: formData.divisionId || undefined,
+      };
+
+      // Remove empty optional fields
+      Object.keys(payload).forEach(key => {
+        if (payload[key as keyof typeof payload] === '') {
+          delete payload[key as keyof typeof payload];
+        }
+      });
+
+      await teamsAPI.create(payload);
       navigate('/teams');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to create team');
@@ -129,113 +135,29 @@ export const CreateTeam = () => {
                 placeholder="e.g., Memorial Stadium"
               />
             </div>
-          </div>
 
-          <div className="border-t pt-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">President Contact</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="label">Name</label>
-                <input
-                  type="text"
-                  name="presidentName"
-                  className="input"
-                  value={formData.presidentName}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label className="label">Email</label>
-                <input
-                  type="email"
-                  name="presidentEmail"
-                  className="input"
-                  value={formData.presidentEmail}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label className="label">Phone</label>
-                <input
-                  type="tel"
-                  name="presidentPhone"
-                  className="input"
-                  value={formData.presidentPhone}
-                  onChange={handleChange}
-                />
-              </div>
+            <div>
+              <label className="label">Team Email</label>
+              <input
+                type="email"
+                name="email"
+                className="input"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="team@example.com"
+              />
             </div>
-          </div>
 
-          <div className="border-t pt-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Coach Contact</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="label">Name</label>
-                <input
-                  type="text"
-                  name="coachName"
-                  className="input"
-                  value={formData.coachName}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label className="label">Email</label>
-                <input
-                  type="email"
-                  name="coachEmail"
-                  className="input"
-                  value={formData.coachEmail}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label className="label">Phone</label>
-                <input
-                  type="tel"
-                  name="coachPhone"
-                  className="input"
-                  value={formData.coachPhone}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t pt-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Match Secretary Contact</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="label">Name</label>
-                <input
-                  type="text"
-                  name="matchSecretaryName"
-                  className="input"
-                  value={formData.matchSecretaryName}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label className="label">Email</label>
-                <input
-                  type="email"
-                  name="matchSecretaryEmail"
-                  className="input"
-                  value={formData.matchSecretaryEmail}
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <label className="label">Phone</label>
-                <input
-                  type="tel"
-                  name="matchSecretaryPhone"
-                  className="input"
-                  value={formData.matchSecretaryPhone}
-                  onChange={handleChange}
-                />
-              </div>
+            <div>
+              <label className="label">Team Phone</label>
+              <input
+                type="tel"
+                name="phoneNumber"
+                className="input"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                placeholder="+1234567890"
+              />
             </div>
           </div>
 
