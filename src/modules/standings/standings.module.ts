@@ -4,9 +4,10 @@ import { StandingsController } from './standings.controller';
 import { StandingsService } from './standings.service';
 import { Standing } from './entities/standing.entity';
 import { Match } from '../matches/entities/match.entity';
+import { Division } from '../divisions/entities/division.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Standing, Match])],
+  imports: [TypeOrmModule.forFeature([Standing, Match, Division])],
   controllers: [StandingsController],
   providers: [StandingsService],
   exports: [StandingsService],

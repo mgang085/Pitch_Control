@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Standing } from './entities/standing.entity';
 import { Match } from '../matches/entities/match.entity';
+import { Division } from '../divisions/entities/division.entity';
 import { MatchStatus } from '../../common/enums/match-status.enum';
 
 @Injectable()
@@ -12,9 +13,23 @@ export class StandingsService {
     private readonly standingRepository: Repository<Standing>,
     @InjectRepository(Match)
     private readonly matchRepository: Repository<Match>,
+    @InjectRepository(Division)
+    private readonly divisionRepository: Repository<Division>,
   ) {}
 
   async calculateStandings(divisionId: string): Promise<Standing[]> {
+    // Load division with union to get point settings
+    const division = await this.divisionRepository.findOne({
+      where: { id: divisionId },
+      relations: ['union'],
+    });
+
+    if (!division || !division.union) {
+      throw new NotFoundException(`Division with ID ${divisionId} not found or has no union`);
+    }
+
+    const union = division.union;
+
     const matches = await this.matchRepository.find({
       where: { divisionId, status: MatchStatus.FINISHED },
       relations: ['homeTeam', 'awayTeam'],
@@ -44,26 +59,56 @@ export class StandingsService {
       awayStanding.pointsAgainst += match.homeScore;
       awayStanding.triesScored += match.awayTries;
 
-      homeStanding.bonusPoints += match.homeBonusPoints;
-      awayStanding.bonusPoints += match.awayBonusPoints;
+      // Calculate bonus points dynamically based on union settings
+      let homeBonusPoints = 0;
+      let awayBonusPoints = 0;
 
-      if (match.homeScore > match.awayScore) {
-        homeStanding.won += 1;
-        homeStanding.totalPoints += 4;
-        awayStanding.lost += 1;
-      } else if (match.awayScore > match.homeScore) {
-        awayStanding.won += 1;
-        awayStanding.totalPoints += 4;
-        homeStanding.lost += 1;
-      } else {
-        homeStanding.drawn += 1;
-        awayStanding.drawn += 1;
-        homeStanding.totalPoints += 2;
-        awayStanding.totalPoints += 2;
+      // Bonus points for scoring tries
+      if (match.homeTries >= union.minimumTriesForBonus) {
+        homeBonusPoints += union.bonusPointsForTries;
+      }
+      if (match.awayTries >= union.minimumTriesForBonus) {
+        awayBonusPoints += union.bonusPointsForTries;
       }
 
-      homeStanding.totalPoints += match.homeBonusPoints;
-      awayStanding.totalPoints += match.awayBonusPoints;
+      // Determine match result and award points
+      if (match.homeScore > match.awayScore) {
+        // Home team wins
+        homeStanding.won += 1;
+        homeStanding.totalPoints += union.winPoints;
+        awayStanding.lost += 1;
+        awayStanding.totalPoints += union.lossPoints;
+
+        // Losing bonus point for close loss
+        const losingMargin = match.homeScore - match.awayScore;
+        if (losingMargin <= union.maximumLosingMarginForBonus) {
+          awayBonusPoints += union.bonusPointsForLosingMargin;
+        }
+      } else if (match.awayScore > match.homeScore) {
+        // Away team wins
+        awayStanding.won += 1;
+        awayStanding.totalPoints += union.winPoints;
+        homeStanding.lost += 1;
+        homeStanding.totalPoints += union.lossPoints;
+
+        // Losing bonus point for close loss
+        const losingMargin = match.awayScore - match.homeScore;
+        if (losingMargin <= union.maximumLosingMarginForBonus) {
+          homeBonusPoints += union.bonusPointsForLosingMargin;
+        }
+      } else {
+        // Draw
+        homeStanding.drawn += 1;
+        awayStanding.drawn += 1;
+        homeStanding.totalPoints += union.drawPoints;
+        awayStanding.totalPoints += union.drawPoints;
+      }
+
+      // Add calculated bonus points
+      homeStanding.bonusPoints += homeBonusPoints;
+      awayStanding.bonusPoints += awayBonusPoints;
+      homeStanding.totalPoints += homeBonusPoints;
+      awayStanding.totalPoints += awayBonusPoints;
     });
 
     await this.standingRepository.delete({ divisionId });
