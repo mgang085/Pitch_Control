@@ -68,11 +68,12 @@ export class StandingsService {
 
     await this.standingRepository.delete({ divisionId });
 
-    const standings: Standing[] = Array.from(standingsMap.values()).map((data) => {
+    const standingData = Array.from(standingsMap.values()).map((data) => {
       data.pointsDifference = data.pointsFor - data.pointsAgainst;
-      return this.standingRepository.create(data);
+      return data;
     });
 
+    const standings = this.standingRepository.create(standingData);
     const savedStandings = await this.standingRepository.save(standings);
 
     return savedStandings.sort((a, b) => {
