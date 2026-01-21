@@ -1,5 +1,4 @@
 import { DataSource } from 'typeorm';
-import * as bcrypt from 'bcrypt';
 
 export async function seedAdminUser(dataSource: DataSource) {
   const userRepository = dataSource.getRepository('User');
@@ -15,23 +14,21 @@ export async function seedAdminUser(dataSource: DataSource) {
     return;
   }
 
-  // Create admin user
-  const hashedPassword = await bcrypt.hash('Alamo123', 10);
-
+  // Create admin user - password will be hashed by @BeforeInsert hook
   const adminUser = await userRepository.save({
     email: 'admin@pitchcontrol.com',
     username: 'admin',
-    password: hashedPassword,
+    password: 'Alamo123',
     firstName: 'System',
     lastName: 'Administrator',
     phoneNumber: '+1234567890',
     isActive: true,
   });
 
-  // Assign LEAGUE_ADMIN role globally (leagueId = null)
+  // Assign LEAGUE_ADMIN role globally (leagueId = undefined for global role)
   await userLeagueRoleRepository.save({
     userId: adminUser.id,
-    leagueId: null,
+    leagueId: undefined,
     role: 'LEAGUE_ADMIN',
   });
 
