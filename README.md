@@ -42,7 +42,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed system design and technica
 - Docker and Docker Compose (for containerized deployment)
 - PostgreSQL 15+ (if running without Docker)
 
-## Quick Start with Docker
+## Quick Start with Docker (Full Stack)
 
 1. **Clone the repository**
    ```bash
@@ -65,11 +65,22 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed system design and technica
    docker-compose up -d
    ```
 
-4. **Access the API**
-   - API: http://localhost:3000/api/v1
-   - Swagger Documentation: http://localhost:3000/api/v1/docs
+4. **Access the application**
+   - **Web Interface**: http://localhost (or http://localhost:80)
+   - **API**: http://localhost:3000/api/v1
+   - **Swagger Documentation**: http://localhost:3000/api/v1/docs
+
+5. **Login with default admin credentials**
+   ```
+   Username: admin
+   Password: Alamo123
+   ```
+
+   The admin user is automatically created on first startup!
 
 ## Local Development Setup
+
+### Backend Setup
 
 1. **Install dependencies**
    ```bash
@@ -82,14 +93,14 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed system design and technica
    ```
    Edit `.env` with your local database credentials.
 
-3. **Start PostgreSQL**
+3. **Start PostgreSQL and Redis**
    ```bash
-   docker-compose up -d postgres
+   docker-compose -f docker-compose.dev.yml up -d
    ```
 
-4. **Run database migrations** (when available)
+4. **Seed the database** (creates default admin user)
    ```bash
-   npm run migration:run
+   npm run seed
    ```
 
 5. **Start development server**
@@ -98,6 +109,36 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed system design and technica
    ```
 
 The API will be available at http://localhost:3000/api/v1
+
+### Frontend Setup
+
+1. **Navigate to frontend directory**
+   ```bash
+   cd frontend
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Create environment file**
+   ```bash
+   cp .env.example .env
+   ```
+
+4. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+The web interface will be available at http://localhost:3001
+
+### Default Admin Login
+```
+Username: admin
+Password: Alamo123
+```
 
 ## API Documentation
 

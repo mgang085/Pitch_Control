@@ -3,10 +3,23 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
+import { DataSource } from 'typeorm';
+import { seedAdminUser } from './database/seeders/admin.seeder';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
+
+  // Run seeders in development mode
+  const nodeEnv = configService.get<string>('NODE_ENV');
+  if (nodeEnv === 'development') {
+    const dataSource = app.get(DataSource);
+    try {
+      await seedAdminUser(dataSource);
+    } catch (error) {
+      console.error('Error running seeders:', error);
+    }
+  }
 
   // Global validation pipe
   app.useGlobalPipes(

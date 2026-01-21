@@ -42,7 +42,7 @@ services:
     ports:
       - "${PORT:-3000}:3000"
     environment:
-      NODE_ENV: ${NODE_ENV:-production}
+      NODE_ENV: ${NODE_ENV:-development}
       PORT: ${PORT:-3000}
       API_PREFIX: ${API_PREFIX:-api/v1}
       DB_HOST: postgres
@@ -67,6 +67,19 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: pitch_control_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      VITE_API_URL: http://localhost:3000/api/v1
+    depends_on:
+      - api
 
 volumes:
   postgres_data:
