@@ -187,7 +187,7 @@ export const CreateLeague = () => {
             </button>
             <button
               type="button"
-              onClick={() => navigate('/leagues')}
+              onClick={() => navigate('/unions')}
               className="btn btn-secondary"
             >
               Cancel
