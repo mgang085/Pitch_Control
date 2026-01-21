@@ -12,6 +12,7 @@ import { Division } from '../../divisions/entities/division.entity';
 import { TeamContact } from './team-contact.entity';
 import { Player } from '../../players/entities/player.entity';
 import { Match } from '../../matches/entities/match.entity';
+import { UserTeamRole } from './user-team-role.entity';
 
 @Entity('teams')
 export class Team {
@@ -66,6 +67,9 @@ export class Team {
 
   @OneToMany(() => TeamContact, (contact) => contact.team)
   contacts: TeamContact[];
+
+  @OneToMany(() => UserTeamRole, (utr) => utr.team)
+  userRoles: UserTeamRole[];
 
   @OneToMany(() => Player, (player) => player.team)
   players: Player[];

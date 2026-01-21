@@ -10,6 +10,7 @@ import {
 import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 import { UserLeagueRole } from './user-league-role.entity';
+import { UserTeamRole } from '../../teams/entities/user-team-role.entity';
 
 @Entity('users')
 export class User {
@@ -40,6 +41,9 @@ export class User {
 
   @OneToMany(() => UserLeagueRole, (ulr) => ulr.user)
   leagueRoles: UserLeagueRole[];
+
+  @OneToMany(() => UserTeamRole, (utr) => utr.user)
+  teamRoles: UserTeamRole[];
 
   @CreateDateColumn()
   createdAt: Date;
