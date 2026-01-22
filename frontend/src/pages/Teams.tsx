@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Plus, Edit } from 'lucide-react';
+import { Users, Plus, Edit, Settings } from 'lucide-react';
 import { teamsAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -73,13 +73,22 @@ export const Teams = () => {
               <div className="flex items-start justify-between mb-3">
                 <h3 className="font-bold text-gray-900 dark:text-white text-lg">{team.name}</h3>
                 {isAuthenticated && (
-                  <button
-                    onClick={() => navigate(`/teams/${team.id}/edit`)}
-                    className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
-                    title="Edit team"
-                  >
-                    <Edit className="w-5 h-5" />
-                  </button>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => navigate(`/teams/${team.id}/manage`)}
+                      className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
+                      title="Manage team"
+                    >
+                      <Settings className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => navigate(`/teams/${team.id}/edit`)}
+                      className="text-gray-600 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                      title="Edit team info"
+                    >
+                      <Edit className="w-5 h-5" />
+                    </button>
+                  </div>
                 )}
               </div>
 
