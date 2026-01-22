@@ -153,12 +153,14 @@ export const Teams = () => {
         <div className="mt-4 pt-4 border-t border-gray-200 dark:border-slate-600">
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Showing <span className="font-semibold text-gray-900 dark:text-white">{teams.length}</span> team{teams.length !== 1 ? 's' : ''}
-            {selectedDivision && divisions.find((d: any) => d.id === selectedDivision) && (
-              <span> in <span className="font-semibold text-gray-900 dark:text-white">{divisions.find((d: any) => d.id === selectedDivision)?.name}</span></span>
-            )}
-            {selectedUnion && !selectedDivision && unions.find((u: any) => u.id === selectedUnion) && (
-              <span> in <span className="font-semibold text-gray-900 dark:text-white">{unions.find((u: any) => u.id === selectedUnion)?.name}</span></span>
-            )}
+            {selectedDivision && (() => {
+              const division = divisions.find((d: any) => d.id === selectedDivision);
+              return division ? <span> in <span className="font-semibold text-gray-900 dark:text-white">{division.name}</span></span> : null;
+            })()}
+            {selectedUnion && !selectedDivision && (() => {
+              const union = unions.find((u: any) => u.id === selectedUnion);
+              return union ? <span> in <span className="font-semibold text-gray-900 dark:text-white">{union.name}</span></span> : null;
+            })()}
           </p>
         </div>
       </div>
