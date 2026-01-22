@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, Calendar, Plus } from 'lucide-react';
-import { unionsAPI, matchesAPI } from '../services/api';
+import { Trophy, Calendar, Plus, Users } from 'lucide-react';
+import { unionsAPI, matchesAPI, teamsAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
 export const Dashboard = () => {
   const { user, hasRole } = useAuth();
   const [leagues, setLeagues] = useState([]);
+  const [teams, setTeams] = useState([]);
   const [upcomingMatches, setUpcomingMatches] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -16,12 +17,14 @@ export const Dashboard = () => {
 
   const loadDashboardData = async () => {
     try {
-      const [leaguesRes, matchesRes] = await Promise.all([
+      const [leaguesRes, matchesRes, teamsRes] = await Promise.all([
         unionsAPI.getAll(),
         matchesAPI.getAll(),
+        teamsAPI.getAll(),
       ]);
       setLeagues(leaguesRes.data);
       setUpcomingMatches(matchesRes.data.slice(0, 5));
+      setTeams(teamsRes.data);
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
     } finally {
@@ -33,6 +36,7 @@ export const Dashboard = () => {
 
   const stats = [
     { name: 'Total Unions', value: leagues.length, icon: Trophy, color: 'bg-blue-500' },
+    { name: 'Total Teams', value: teams.length, icon: Users, color: 'bg-purple-500' },
     { name: 'Upcoming Matches', value: upcomingMatches.length, icon: Calendar, color: 'bg-green-500' },
   ];
 
@@ -40,25 +44,25 @@ export const Dashboard = () => {
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Welcome back, {user?.firstName}!
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
             Here's what's happening in your rugby unions
           </p>
         </div>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
             <div key={stat.name} className="card">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">{stat.name}</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-2">{stat.value}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{stat.name}</p>
+                  <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{stat.value}</p>
                 </div>
                 <div className={`${stat.color} p-3 rounded-lg`}>
                   <Icon className="w-6 h-6 text-white" />

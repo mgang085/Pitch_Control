@@ -151,12 +151,20 @@ export class StandingsService {
   }
 
   async getStandings(divisionId: string): Promise<Standing[]> {
+    // Get all teams in the division
+    const teams = await this.teamRepository.find({
+      where: { divisionId },
+    });
+
+    // Get existing standings
     const standings = await this.standingRepository.find({
       where: { divisionId },
       relations: ['team', 'division'],
     });
 
-    if (standings.length === 0) {
+    // If no standings exist OR the number of teams doesn't match standings count,
+    // recalculate to include all teams
+    if (standings.length === 0 || standings.length !== teams.length) {
       return this.calculateStandings(divisionId);
     }
 
