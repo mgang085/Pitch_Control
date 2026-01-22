@@ -8,6 +8,7 @@ import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
 import { Leagues } from './pages/Leagues';
 import { CreateLeague } from './pages/CreateLeague';
+import { ViewUnion } from './pages/ViewUnion';
 import { EditUnion } from './pages/EditUnion';
 import { CreateDivision } from './pages/CreateDivision';
 import { Teams } from './pages/Teams';
@@ -74,6 +75,15 @@ function App() {
                     <Dashboard />
                   </Layout>
                 </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/unions/:id"
+              element={
+                <Layout>
+                  <ViewUnion />
+                </Layout>
               }
             />
 
