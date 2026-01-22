@@ -134,7 +134,13 @@ export class StandingsService {
     });
 
     const standings = this.standingRepository.create(standingData);
-    const savedStandings = await this.standingRepository.save(standings);
+    await this.standingRepository.save(standings);
+
+    // Reload standings with team relation
+    const savedStandings = await this.standingRepository.find({
+      where: { divisionId },
+      relations: ['team'],
+    });
 
     return savedStandings.sort((a, b) => {
       if (b.totalPoints !== a.totalPoints) return b.totalPoints - a.totalPoints;
