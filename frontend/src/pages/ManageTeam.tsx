@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Users, UserPlus, Edit, Trash2, Plus, Shield, ArrowLeft } from 'lucide-react';
-import { teamsAPI, playersAPI } from '../services/api';
+import { teamsAPI, playersAPI, usersAPI } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 
 export const ManageTeam = () => {
@@ -201,6 +201,11 @@ export const ManageTeam = () => {
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">
                     {officer.user?.firstName} {officer.user?.lastName}
+                    {officer.user?.displayId && (
+                      <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+                        (ID: {officer.user.displayId})
+                      </span>
+                    )}
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{officer.role}</p>
                   {officer.user?.email && (
@@ -341,20 +346,46 @@ export const ManageTeam = () => {
 };
 
 // Add Officer Form Component
-const AddOfficerForm = ({ teamId: _teamId, onSuccess: _onSuccess, onCancel }: any) => {
-  const [formData, setFormData] = useState({ email: '', role: 'MATCH_SECRETARY' });
+const AddOfficerForm = ({ teamId, onSuccess, onCancel }: any) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [role, setRole] = useState('MATCH_SECRETARY');
   const [loading, setLoading] = useState(false);
+  const [searching, setSearching] = useState(false);
   const [error, setError] = useState('');
+
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) return;
+
+    setSearching(true);
+    setError('');
+    try {
+      const response = await usersAPI.search(searchQuery);
+      setSearchResults(response.data);
+      if (response.data.length === 0) {
+        setError('No users found matching your search');
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Failed to search users');
+    } finally {
+      setSearching(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedUser) {
+      setError('Please select a user first');
+      return;
+    }
+
     setError('');
     setLoading(true);
 
     try {
-      // TODO: Need to implement user lookup by email first
-      // For now, show error message
-      setError('User lookup by email not yet implemented. Please use user ID directly.');
+      await teamsAPI.assignOfficer(teamId, selectedUser.id, role);
+      onSuccess();
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to add officer');
     } finally {
@@ -370,40 +401,120 @@ const AddOfficerForm = ({ teamId: _teamId, onSuccess: _onSuccess, onCancel }: an
           {error}
         </div>
       )}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="label">User Email</label>
-          <input
-            type="email"
-            className="input"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            placeholder="user@example.com"
-            required
-          />
+
+      {!selectedUser ? (
+        <div className="space-y-4">
+          <div>
+            <label className="label">Search User (by ID, username, or email)</label>
+            <div className="flex space-x-2">
+              <input
+                type="text"
+                className="input flex-1"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Enter user ID, username, or email..."
+                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              />
+              <button
+                type="button"
+                onClick={handleSearch}
+                disabled={searching || !searchQuery.trim()}
+                className="btn btn-secondary"
+              >
+                {searching ? 'Searching...' : 'Search'}
+              </button>
+            </div>
+            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+              Tip: You can search by user ID (e.g., 1001), username, or email
+            </p>
+          </div>
+
+          {searchResults.length > 0 && (
+            <div className="space-y-2">
+              <label className="label">Select User</label>
+              {searchResults.map((user: any) => (
+                <div
+                  key={user.id}
+                  onClick={() => setSelectedUser(user)}
+                  className="p-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded cursor-pointer hover:border-primary-500 dark:hover:border-primary-400"
+                >
+                  <div className="font-semibold text-gray-900 dark:text-white">
+                    {user.firstName} {user.lastName}
+                    <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+                      (ID: {user.displayId})
+                    </span>
+                  </div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    {user.username} • {user.email}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="flex space-x-3">
+            <button type="button" onClick={onCancel} className="btn btn-secondary flex-1">
+              Cancel
+            </button>
+          </div>
         </div>
-        <div>
-          <label className="label">Role</label>
-          <select
-            className="input"
-            value={formData.role}
-            onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-            required
-          >
-            <option value="PRESIDENT">President</option>
-            <option value="COACH">Coach</option>
-            <option value="MATCH_SECRETARY">Match Secretary</option>
-          </select>
-        </div>
-        <div className="flex space-x-3">
-          <button type="submit" disabled={loading} className="btn btn-primary flex-1">
-            {loading ? 'Adding...' : 'Add Officer'}
-          </button>
-          <button type="button" onClick={onCancel} className="btn btn-secondary">
-            Cancel
-          </button>
-        </div>
-      </form>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="p-3 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded">
+            <div className="font-semibold text-gray-900 dark:text-white">
+              {selectedUser.firstName} {selectedUser.lastName}
+              <span className="ml-2 text-sm text-gray-500 dark:text-gray-400">
+                (ID: {selectedUser.displayId})
+              </span>
+            </div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {selectedUser.username} • {selectedUser.email}
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedUser(null);
+                setSearchResults([]);
+                setSearchQuery('');
+              }}
+              className="text-xs text-primary-600 dark:text-primary-400 mt-2 hover:underline"
+            >
+              Change user
+            </button>
+          </div>
+
+          <div>
+            <label className="label">Role</label>
+            <select
+              className="input"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              required
+            >
+              <option value="PRESIDENT">President</option>
+              <option value="COACH">Coach</option>
+              <option value="MATCH_SECRETARY">Match Secretary</option>
+            </select>
+          </div>
+
+          <div className="flex space-x-3">
+            <button type="submit" disabled={loading} className="btn btn-primary flex-1">
+              {loading ? 'Adding...' : 'Add Officer'}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedUser(null);
+                setSearchResults([]);
+                setSearchQuery('');
+              }}
+              className="btn btn-secondary"
+            >
+              Back
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   );
 };

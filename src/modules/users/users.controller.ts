@@ -9,6 +9,7 @@ import {
   UseGuards,
   ClassSerializerInterceptor,
   UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from './users.service';
@@ -30,6 +31,14 @@ export class UsersController {
   @ApiOperation({ summary: 'Create a new user' })
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
+  }
+
+  @Get('search')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Search users by display ID, username, or email' })
+  search(@Query('q') query: string) {
+    return this.usersService.searchUsers(query);
   }
 
   @Get()

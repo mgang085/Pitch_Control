@@ -67,6 +67,12 @@ export const unionsAPI = {
 // Backward compatibility alias (deprecated, use unionsAPI)
 export const leaguesAPI = unionsAPI;
 
+// Users API
+export const usersAPI = {
+  search: (query: string) => api.get('/users/search', { params: { q: query } }),
+  getOne: (id: string) => api.get(`/users/${id}`),
+};
+
 // Divisions API
 export const divisionsAPI = {
   getAll: (leagueId?: string) => api.get('/divisions', { params: { leagueId } }),

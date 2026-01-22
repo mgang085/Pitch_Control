@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   OneToMany,
   BeforeInsert,
+  Generated,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
@@ -16,6 +17,10 @@ import { UserTeamRole } from '../../teams/entities/user-team-role.entity';
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column({ unique: true })
+  @Generated('increment')
+  displayId: number;
 
   @Column({ unique: true })
   email: string;

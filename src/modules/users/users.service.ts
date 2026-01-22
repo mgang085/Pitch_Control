@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { User } from './entities/user.entity';
 import { UserLeagueRole } from './entities/user-league-role.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -113,5 +113,29 @@ export class UsersService {
 
     const roles = await query.getMany();
     return roles.map((r) => r.role);
+  }
+
+  async searchUsers(query: string): Promise<User[]> {
+    // Check if query is a number (displayId search)
+    const isNumeric = /^\d+$/.test(query);
+
+    if (isNumeric) {
+      // Search by displayId
+      const user = await this.userRepository.findOne({
+        where: { displayId: parseInt(query) },
+        relations: ['leagueRoles', 'leagueRoles.union'],
+      });
+      return user ? [user] : [];
+    }
+
+    // Search by username or email
+    return this.userRepository.find({
+      where: [
+        { username: Like(`%${query}%`) },
+        { email: Like(`%${query}%`) },
+      ],
+      relations: ['leagueRoles', 'leagueRoles.union'],
+      take: 10, // Limit results
+    });
   }
 }
