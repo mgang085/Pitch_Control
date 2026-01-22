@@ -39,9 +39,13 @@ export class TeamsController {
   @Get()
   @Public()
   @ApiQuery({ name: 'divisionId', required: false })
+  @ApiQuery({ name: 'unionId', required: false })
   @ApiOperation({ summary: 'Get all teams' })
-  findAll(@Query('divisionId') divisionId?: string) {
-    return this.teamsService.findAll(divisionId);
+  findAll(
+    @Query('divisionId') divisionId?: string,
+    @Query('unionId') unionId?: string,
+  ) {
+    return this.teamsService.findAll(divisionId, unionId);
   }
 
   @Get(':id')

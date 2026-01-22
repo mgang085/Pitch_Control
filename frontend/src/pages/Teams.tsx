@@ -9,7 +9,8 @@ export const Teams = () => {
   const { user } = useAuth();
   const [teams, setTeams] = useState([]);
   const [unions, setUnions] = useState([]);
-  const [divisions, setDivisions] = useState([]);
+  const [allDivisions, setAllDivisions] = useState([]);
+  const [filteredDivisions, setFilteredDivisions] = useState([]);
   const [selectedUnion, setSelectedUnion] = useState('');
   const [selectedDivision, setSelectedDivision] = useState('');
   const [loading, setLoading] = useState(true);
@@ -20,25 +21,30 @@ export const Teams = () => {
 
   useEffect(() => {
     if (selectedUnion) {
-      loadDivisions(selectedUnion);
+      // Filter divisions by selected union
+      const divisions = allDivisions.filter((d: any) => d.leagueId === selectedUnion);
+      setFilteredDivisions(divisions);
     } else {
-      setDivisions([]);
-      setSelectedDivision('');
+      // Show all divisions
+      setFilteredDivisions(allDivisions);
     }
-  }, [selectedUnion]);
+  }, [selectedUnion, allDivisions]);
 
   useEffect(() => {
     loadTeams();
-  }, [selectedDivision]);
+  }, [selectedDivision, selectedUnion]);
 
   const loadInitialData = async () => {
     try {
-      const [teamsRes, unionsRes] = await Promise.all([
+      const [teamsRes, unionsRes, divisionsRes] = await Promise.all([
         teamsAPI.getAll(),
         unionsAPI.getAll(),
+        divisionsAPI.getAll(),
       ]);
       setTeams(teamsRes.data);
       setUnions(unionsRes.data);
+      setAllDivisions(divisionsRes.data);
+      setFilteredDivisions(divisionsRes.data);
     } catch (error) {
       console.error('Failed to load initial data:', error);
     } finally {
@@ -46,18 +52,14 @@ export const Teams = () => {
     }
   };
 
-  const loadDivisions = async (unionId: string) => {
-    try {
-      const response = await divisionsAPI.getAll(unionId);
-      setDivisions(response.data);
-    } catch (error) {
-      console.error('Failed to load divisions:', error);
-    }
-  };
-
   const loadTeams = async () => {
     try {
-      const response = await teamsAPI.getAll(selectedDivision || undefined);
+      // If division is selected, filter by division (takes precedence)
+      // Otherwise, filter by union if selected
+      const response = await teamsAPI.getAll(
+        selectedDivision || undefined,
+        selectedDivision ? undefined : selectedUnion || undefined
+      );
       setTeams(response.data);
     } catch (error) {
       console.error('Failed to load teams:', error);
@@ -66,6 +68,7 @@ export const Teams = () => {
 
   const handleUnionChange = (unionId: string) => {
     setSelectedUnion(unionId);
+    // Clear division selection when union changes
     setSelectedDivision('');
   };
 
@@ -124,18 +127,17 @@ export const Teams = () => {
               className="input"
               value={selectedDivision}
               onChange={(e) => setSelectedDivision(e.target.value)}
-              disabled={!selectedUnion}
             >
               <option value="">All Divisions</option>
-              {divisions.map((division: any) => (
+              {filteredDivisions.map((division: any) => (
                 <option key={division.id} value={division.id}>
                   {division.name}
                 </option>
               ))}
             </select>
-            {!selectedUnion && (
+            {selectedUnion && (
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                Select a union first
+                Showing divisions in selected union
               </p>
             )}
           </div>
@@ -154,7 +156,7 @@ export const Teams = () => {
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Showing <span className="font-semibold text-gray-900 dark:text-white">{teams.length}</span> team{teams.length !== 1 ? 's' : ''}
             {selectedDivision && (() => {
-              const division: any = divisions.find((d: any) => d.id === selectedDivision);
+              const division: any = allDivisions.find((d: any) => d.id === selectedDivision);
               return division ? <span> in <span className="font-semibold text-gray-900 dark:text-white">{division.name}</span></span> : null;
             })()}
             {selectedUnion && !selectedDivision && (() => {

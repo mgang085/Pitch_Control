@@ -51,8 +51,18 @@ export class TeamsService {
     return this.teamRepository.save(team);
   }
 
-  async findAll(divisionId?: string): Promise<Team[]> {
-    const where = divisionId ? { divisionId } : {};
+  async findAll(divisionId?: string, unionId?: string): Promise<Team[]> {
+    const where: any = {};
+
+    // If divisionId is provided, filter by division (takes precedence)
+    if (divisionId) {
+      where.divisionId = divisionId;
+    }
+    // If only unionId is provided, filter by union
+    else if (unionId) {
+      where.unionId = unionId;
+    }
+
     return this.teamRepository.find({
       where,
       relations: ['union', 'division', 'contacts', 'players'],

@@ -84,7 +84,12 @@ export const divisionsAPI = {
 
 // Teams API
 export const teamsAPI = {
-  getAll: (divisionId?: string) => api.get('/teams', { params: { divisionId } }),
+  getAll: (divisionId?: string, unionId?: string) => {
+    const params: any = {};
+    if (divisionId) params.divisionId = divisionId;
+    if (unionId) params.unionId = unionId;
+    return api.get('/teams', { params });
+  },
   getOne: (id: string) => api.get(`/teams/${id}`),
   create: (data: any) => api.post('/teams', data),
   updateInfo: (id: string, data: any) => api.put(`/teams/${id}/info`, data),
