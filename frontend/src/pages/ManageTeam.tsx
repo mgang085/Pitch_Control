@@ -341,7 +341,7 @@ export const ManageTeam = () => {
 };
 
 // Add Officer Form Component
-const AddOfficerForm = ({ teamId, onSuccess, onCancel }: any) => {
+const AddOfficerForm = ({ teamId: _teamId, onSuccess: _onSuccess, onCancel }: any) => {
   const [formData, setFormData] = useState({ email: '', role: 'MATCH_SECRETARY' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
